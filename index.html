@@ -73,7 +73,7 @@ h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
 .entry .org { color: var(--muted); font-size: 15px; margin-bottom: 6px; }
 .entry p { margin: 0; font-size: 15px; }
 
-.edu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.edu, .certs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
 .card .when { font-size: 14px; color: var(--muted); }
 .card h3 { font: 600 17px/1.35 var(--sans); margin: 4px 0; }
@@ -97,7 +97,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
   nav .links { display: none; }
   .hero { grid-template-columns: 1fr; padding-top: 44px; }
   .hero img { width: 120px; height: 120px; order: -1; }
-  .proj, .skills, .edu { grid-template-columns: 1fr; }
+  .proj, .skills, .edu, .certs { grid-template-columns: 1fr; }
   .langs { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
@@ -106,7 +106,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
 <nav>
   <div class="wrap">
     <a class="logo" href="#">Amrina</a>
-    <div class="links"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#skills">Skills</a><a href="#contact">Contact</a></div>
+    <div class="links"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#certificates">Certificates</a><a href="#skills">Skills</a><a href="#contact">Contact</a></div>
   </div>
 </nav>
 
@@ -187,7 +187,19 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
     <div class="edu">
       <div class="card"><div class="when">2022 – 2025</div><h3>M.Sc. Educational Technology</h3><div class="org">Saarland University, Germany</div><div class="grade"><b>1.4</b> · very good</div><p class="org" style="margin-top:8px">Instructional design, multimedia learning, AI in education, empirical methods, eye tracking, machine learning for NLP. DAAD scholarship.</p></div>
       <div class="card"><div class="when">2012 – 2016</div><h3>Bachelor of Computer Science (S.Kom.)</h3><div class="org">Syiah Kuala University, Indonesia</div><div class="grade"><b>3.43</b> / 4.00</div><p class="org" style="margin-top:8px">Software engineering, databases, algorithms, web programming.</p></div>
-      <div class="card"><div class="when">2012 – 2018</div><h3>Bachelor of English Education</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><p class="org" style="margin-top:8px">Pedagogy and curriculum design.</p></div>
+      <div class="card"><div class="when">2012 – 2018</div><h3>Bachelor of Education (S.Pd.), English</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><p class="org" style="margin-top:8px">Pedagogy and curriculum design.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="certificates">
+  <div class="wrap">
+    <h2>Certificates &amp; training</h2>
+    <p class="sub">Courses beyond my degrees. The full collection is on my <a href="https://amrinaali.notion.site/The-Certificate-Shelf-33557328c9ff80d8848cc991b29637eb">Certificate Shelf</a>.</p>
+    <div class="certs">
+      <div class="card"><div class="when">Jul – Aug 2022 · 80 hours</div><h3>Professional Academy: Go programming</h3><div class="org">Digital Talent Scholarship, Indonesian Ministry of Communication and Informatics (Kominfo) with Progate</div><p class="org" style="margin-top:8px">Git, HTML &amp; CSS, Go (four modules), a team web project and a final project.</p></div>
+      <div class="card"><div class="when">Jul 2022</div><h3>HTML &amp; CSS course</h3><div class="org">Progate</div><p class="org" style="margin-top:8px">Fundamentals of HTML and CSS: four lessons and three exercises. <a href="https://progate.com/course_certificate/03bb257arfoda5">Verify</a></p></div>
+      <div class="card"><div class="when">Code.org × Microsoft</div><h3>Hour of Code</h3><div class="org">Code.org</div><p class="org" style="margin-top:8px">Basic concepts of computer science.</p></div>
     </div>
   </div>
 </section>
@@ -197,7 +209,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
     <h2>Skills</h2>
     <p class="sub">What I use to build, teach and evaluate.</p>
     <div class="skills">
-      <div class="card"><h3>AI &amp; programming</h3><div class="chips"><span class="chip">Python</span><span class="chip">LLMs &amp; prompt engineering</span><span class="chip">RAG</span><span class="chip">LangChain</span><span class="chip">Vector databases</span><span class="chip">PyTorch / Transformers</span><span class="chip">Streamlit</span><span class="chip">HTML &amp; CSS</span><span class="chip">WordPress</span></div></div>
+      <div class="card"><h3>AI &amp; programming</h3><div class="chips"><span class="chip">Python</span><span class="chip">LLMs &amp; prompt engineering</span><span class="chip">RAG</span><span class="chip">LangChain</span><span class="chip">Vector databases</span><span class="chip">PyTorch / Transformers</span><span class="chip">Streamlit</span><span class="chip">HTML &amp; CSS</span><span class="chip">Go (basics)</span><span class="chip">Git</span><span class="chip">WordPress</span></div></div>
       <div class="card"><h3>Learning design &amp; e-learning</h3><div class="chips"><span class="chip">Instructional design</span><span class="chip">Design thinking</span><span class="chip">LMS administration</span><span class="chip">Articulate 360</span><span class="chip">H5P</span><span class="chip">Adobe Captivate</span></div></div>
       <div class="card"><h3>Research &amp; data</h3><div class="chips"><span class="chip">Empirical research methods</span><span class="chip">Statistics (ANOVA, regression)</span><span class="chip">Eye tracking</span><span class="chip">Tableau</span><span class="chip">Google Analytics</span></div></div>
       <div class="card"><h3>Design &amp; collaboration</h3><div class="chips"><span class="chip">Figma</span><span class="chip">Miro</span><span class="chip">Canva</span><span class="chip">Illustrator</span><span class="chip">OBS &amp; Audacity</span><span class="chip">Jira / Trello</span><span class="chip">Microsoft 365</span></div></div>
