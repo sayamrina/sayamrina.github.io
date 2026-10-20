@@ -57,7 +57,7 @@ h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
 .filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .proj[hidden] { display: none; }
-.proj { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; align-items: center; }
+.proj { display: grid; grid-template-columns: 300px 1fr; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; align-items: start; }
 .proj img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
 .proj .type { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .proj h3 { font: 650 24px/1.2 var(--serif); margin: 6px 0 10px; }
@@ -66,9 +66,12 @@ h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
 .proj li { margin-bottom: 4px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
 .chip { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-ink); }
-.plinks { display: flex; flex-wrap: wrap; gap: 14px; font-weight: 600; font-size: 15px; }
-.plinks a { text-decoration: none; }
-.plinks a::after { content: " →"; }
+.plinks { display: flex; flex-wrap: wrap; gap: 8px; }
+.plinks a { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--accent); color: var(--accent); background: var(--surface); font-weight: 600; font-size: 14px; line-height: 1.2; text-decoration: none; transition: background .15s, color .15s; }
+.plinks a:first-child { background: var(--accent); color: var(--bg); }
+.plinks a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+.plinks a:first-child:hover { background: var(--accent-ink); color: var(--bg); }
+.plinks a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .timeline { border-left: 2px solid var(--line); margin-left: 6px; }
 .entry { position: relative; padding: 0 0 26px 24px; }
@@ -85,6 +88,7 @@ h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
 .card h3 { font: 600 17px/1.35 var(--sans); margin: 4px 0; }
 .card .org { color: var(--muted); font-size: 15px; }
 .card .grade { margin-top: 10px; font-size: 15px; }
+.card .grade .scale { color: var(--muted); font-size: 13px; }
 .card .grade b { font: 650 22px/1 var(--serif); color: var(--accent-ink); }
 
 .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -122,7 +126,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
       <span class="status">Saarbrücken, Germany · open to roles in EdTech, AI and research</span>
       <h1>Amrina</h1>
       <p class="tagline">Educational technologist and AI developer, building AI that helps people learn and that people can trust.</p>
-      <p class="bio">I hold an M.Sc. in Educational Technology from Saarland University (grade 1.4, "very good") and a bachelor's degree in Informatics. I build LLM applications with retrieval-augmented generation, design digital learning experiences, and study how AI systems can explain things in a way that fits what each learner already knows.</p>
+      <p class="bio">I hold an M.Sc. in Educational Technology from Saarland University, Germany, and two bachelor's degrees in Informatics and English Education. I build LLM applications with retrieval-augmented generation, design digital learning experiences, and study how AI systems can explain things in a way that fits what each learner already knows. My recent projects bring AI into everyday work: internal assistants that cite their sources, GDPR-aware automation and the step-by-step adoption of AI in organisations.</p>
       <div class="btns">
         <a class="btn primary" href="#projects">See my projects</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/amrina-ali-487025119/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11z"/></svg>LinkedIn</a>
@@ -277,9 +281,9 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
     <h2>Education</h2>
     <p class="sub">A technical foundation in informatics, and a pedagogical one in teaching and learning.</p>
     <div class="edu">
-      <div class="card"><div class="when">2022 – 2025</div><h3>M.Sc. Educational Technology</h3><div class="org">Saarland University, Germany</div><div class="grade"><b>1.4</b> · very good</div><p class="org" style="margin-top:8px">Instructional design, multimedia learning, AI in education, empirical methods, eye tracking, machine learning for NLP. DAAD scholarship.</p></div>
+      <div class="card"><div class="when">2022 – 2025</div><h3>M.Sc. Educational Technology</h3><div class="org">Saarland University, Germany</div><div class="grade"><b>1.4</b> / 1.0 · very good<br><span class="scale">German scale, 1.0 is the best grade</span></div><p class="org" style="margin-top:8px">Instructional design, multimedia learning, AI in education, empirical methods, eye tracking, machine learning for NLP. DAAD scholarship.</p></div>
       <div class="card"><div class="when">2012 – 2016</div><h3>Bachelor of Computer Science (S.Kom.)</h3><div class="org">Syiah Kuala University, Indonesia</div><div class="grade"><b>3.43</b> / 4.00</div><p class="org" style="margin-top:8px">Software engineering, databases, algorithms, web programming.</p></div>
-      <div class="card"><div class="when">2012 – 2018</div><h3>Bachelor of Education (S.Pd.), English</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><p class="org" style="margin-top:8px">Pedagogy and curriculum design.</p></div>
+      <div class="card"><div class="when">2012 – 2018</div><h3>Bachelor of Education (S.Pd.), English</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><div class="grade"><b>3.4</b> / 4.0</div><p class="org" style="margin-top:8px">Pedagogy and curriculum design.</p></div>
     </div>
   </div>
 </section>
