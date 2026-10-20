@@ -57,13 +57,14 @@ h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
 .filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .proj[hidden] { display: none; }
-.proj { display: grid; grid-template-columns: 300px 1fr; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; align-items: start; }
-.proj img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+.proj { display: flow-root; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+.proj img { float: left; width: 300px; margin: 4px 28px 12px 0; border-radius: 10px; border: 1px solid var(--line); display: block; }
 .proj .type { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .proj h3 { font: 650 24px/1.2 var(--serif); margin: 6px 0 10px; }
 .proj p { margin: 0 0 12px; }
-.proj ul { margin: 0 0 14px; padding-left: 18px; }
-.proj li { margin-bottom: 4px; }
+.proj ul { margin: 0 0 14px; padding-left: 0; list-style: none; }
+.proj li { margin-bottom: 6px; }
+.proj li::before { content: "\25B8"; color: var(--accent); margin-right: 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
 .chip { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-ink); }
 .plinks { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -107,7 +108,8 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
   nav .links { display: none; }
   .hero { grid-template-columns: 1fr; padding-top: 44px; }
   .hero img { width: 120px; height: 120px; order: -1; }
-  .proj, .skills, .edu, .certs { grid-template-columns: 1fr; }
+  .skills, .edu, .certs { grid-template-columns: 1fr; }
+  .proj img { float: none; width: 100%; margin: 0 0 16px; }
   .langs { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
