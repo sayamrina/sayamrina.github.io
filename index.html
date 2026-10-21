@@ -3,357 +3,420 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Amrina · Educational Technology & AI</title>
+<title>Amrina, educational technology and AI</title>
 <meta name="description" content="Amrina: educational technologist and AI developer. LLMs, retrieval-augmented generation, learning design. M.Sc. Educational Technology, Saarland University.">
-<meta property="og:title" content="Amrina · Educational Technology & AI">
+<meta property="og:title" content="Amrina, educational technology and AI">
 <meta property="og:description" content="LLMs, retrieval-augmented generation and learning design. M.Sc. Educational Technology, Saarland University.">
 <meta property="og:image" content="https://sayamrina.github.io/img/amrina.jpg">
+<meta name="theme-color" content="#fbfcfd">
 <link rel="icon" href="img/amrina.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,560;0,7..72,700;1,7..72,400&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f6f5f1; --surface: #ffffff; --ink: #1b1d22; --muted: #5d6068; --line: #e2e0d9;
-  --accent: #0f5c4d; --accent-soft: #e2efeb; --accent-ink: #0b4a3e;
-  --serif: "Fraunces", Georgia, serif; --sans: "Inter", system-ui, sans-serif;
+  --paper: #fbfcfd;
+  --ink: #17213b;
+  --ink-soft: #4f5a72;
+  --rule: #dfe4ec;
+  --link: #2747a6;
+  --marker: #ffe76a;
+  --marker-ink: #17213b;
+  --screen: #ffffff;
+  --serif: "Literata", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --measure: 40rem;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #121614; --surface: #1a201d; --ink: #e8ebe8; --muted: #a2aaa5; --line: #2b332f;
-    --accent: #6fcdb5; --accent-soft: #1b322b; --accent-ink: #8fdcc7; }
-  .proj img { background: #fff; }
+  :root {
+    --paper: #10172a; --ink: #e7ebf3; --ink-soft: #a5afc4; --rule: #273150;
+    --link: #9db4ff; --marker: #e9cf3f; --marker-ink: #10172a; --screen: #ffffff;
+  }
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); }
-a { color: var(--accent); }
-.wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.65 var(--serif); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 2px; }
+mark { background: var(--marker); color: var(--marker-ink); padding: 0 .2em; border-radius: 2px; white-space: nowrap; }
+.page { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
-nav .logo { font: 650 18px/1 var(--serif); text-decoration: none; color: var(--ink); }
-nav .links { display: flex; gap: 18px; font-size: 14px; }
-nav .links a { color: var(--muted); text-decoration: none; }
-nav .links a:hover { color: var(--ink); }
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .page { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-top: 16px; padding-bottom: 14px; }
+.bar .name { font: 700 19px/1 var(--serif); color: var(--ink); text-decoration: none; }
+.bar nav { display: flex; gap: 22px; font: 500 15px/1 var(--sans); }
+.bar nav a { color: var(--ink-soft); text-decoration: none; }
+.bar nav a:hover { color: var(--ink); }
 
-.hero { padding: 72px 0 56px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
-.hero img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid var(--surface); box-shadow: 0 8px 28px rgba(0, 0, 0, .1); }
-.status { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--accent-ink); background: var(--accent-soft); padding: 6px 12px; border-radius: 999px; }
-.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-h1 { font: 650 clamp(40px, 7vw, 64px)/1.05 var(--serif); margin: 18px 0 12px; letter-spacing: -0.01em; }
-.tagline { font: 500 clamp(19px, 2.6vw, 23px)/1.4 var(--serif); color: var(--accent-ink); margin: 0 0 16px; }
-.bio { max-width: 620px; color: var(--ink); margin: 0 0 24px; }
-.btns { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--accent); }
-.btn.primary { background: var(--accent); color: var(--bg); }
-.btn.ghost { color: var(--accent); }
+/* hero: a bio that cites its evidence */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: 0 56px; padding: 88px 0 72px; }
+.hero h1 { grid-column: 1 / -1; font: 700 clamp(56px, 11vw, 132px)/.92 var(--serif); letter-spacing: -.035em; margin: 0 0 40px; font-variation-settings: "opsz" 72; }
+.hero .lede { font: 400 clamp(22px, 2.6vw, 28px)/1.42 var(--serif); max-width: 34ch; margin: 0 0 28px; }
+.hero .bio { max-width: var(--measure); margin: 0 0 32px; }
+.hero .where { font: 400 15px/1.5 var(--sans); color: var(--ink-soft); margin: 0 0 24px; }
+.ref { font: 600 .62em/0 var(--sans); vertical-align: super; margin-left: 1px; text-decoration: none; padding: 0 1px; }
+.notes { list-style: none; margin: 0; padding: 0; font: 400 14px/1.5 var(--sans); color: var(--ink-soft); align-self: end; }
+.notes li { padding: 14px 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1.4em minmax(0, 1fr); }
+.notes li:target, .notes li:hover { color: var(--ink); }
+.notes .n { font-weight: 600; color: var(--link); }
+.notes b { color: var(--ink); font-weight: 600; }
+.portrait { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; display: block; margin-bottom: 20px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px/1 var(--sans); padding: 12px 18px; border-radius: 6px; text-decoration: none; border: 1.5px solid var(--ink); color: var(--ink); background: transparent; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.solid { background: var(--ink); color: var(--paper); }
+.btn.solid:hover { background: var(--link); border-color: var(--link); }
 .btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-section { padding: 56px 0; border-top: 1px solid var(--line); }
-h2 { font: 650 30px/1.2 var(--serif); margin: 0 0 8px; }
-.sub { color: var(--muted); margin: 0 0 28px; }
+/* sections */
+section { border-top: 1px solid var(--ink); padding: 28px 0 80px; }
+.head { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 0 56px; align-items: baseline; margin-bottom: 40px; }
+h2 { font: 700 34px/1.1 var(--serif); letter-spacing: -.015em; margin: 0; }
+.head p { margin: 0; color: var(--ink-soft); max-width: var(--measure); }
 
-.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: -8px 0 24px; }
-.filter { font: 500 14px/1 var(--sans); padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
-.filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-.filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* projects */
+.filters { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: -16px 0 36px; font: 500 15px/1 var(--sans); }
+.filter { font: inherit; color: var(--ink-soft); background: none; border: 0; padding: 8px 0; cursor: pointer; border-bottom: 2px solid transparent; }
+.filter:hover { color: var(--ink); }
+.filter[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--marker); box-shadow: inset 0 -6px 0 var(--marker); }
+.proj { display: grid; grid-template-columns: 15rem minmax(0, 1fr) 13rem; gap: 0 40px; padding: 36px 0; border-top: 1px solid var(--rule); }
+.proj:first-of-type { border-top: 0; padding-top: 0; }
 .proj[hidden] { display: none; }
-.proj { display: flow-root; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-.proj img { float: left; width: 300px; margin: 4px 28px 12px 0; border-radius: 10px; border: 1px solid var(--line); display: block; }
-.proj .type { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.proj h3 { font: 650 24px/1.2 var(--serif); margin: 6px 0 10px; }
-.proj p { margin: 0 0 12px; }
-.proj ul { margin: 0 0 14px; padding-left: 0; list-style: none; }
-.proj li { margin-bottom: 6px; }
-.proj li::before { content: "\25B8"; color: var(--accent); margin-right: 8px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
-.chip { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-ink); }
-.plinks { display: flex; flex-wrap: wrap; gap: 8px; }
-.plinks a { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--accent); color: var(--accent); background: var(--surface); font-weight: 600; font-size: 14px; line-height: 1.2; text-decoration: none; transition: background .15s, color .15s; }
-.plinks a:first-child { background: var(--accent); color: var(--bg); }
-.plinks a:hover { background: var(--accent-soft); color: var(--accent-ink); }
-.plinks a:first-child:hover { background: var(--accent-ink); color: var(--bg); }
-.plinks a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.proj img { width: 100%; border-radius: 4px; border: 1px solid var(--rule); background: var(--screen); display: block; }
+.proj h3 { font: 700 25px/1.2 var(--serif); letter-spacing: -.01em; margin: 0 0 4px; }
+.proj .kind { font: 400 15px/1.4 var(--sans); color: var(--ink-soft); margin: 0 0 14px; }
+.proj p { margin: 0 0 14px; max-width: var(--measure); }
+.proj ul { margin: 0 0 16px; padding-left: 1.1em; max-width: var(--measure); }
+.proj li { margin-bottom: 6px; padding-left: 4px; }
+.proj li::marker { color: var(--ink-soft); }
+.proj .stack { font: 400 14px/1.5 var(--sans); color: var(--ink-soft); margin: 0 0 18px; }
+.proj .actions .btn { font-size: 14px; padding: 9px 14px; }
+.proj .proof { margin: 0; font: 400 14px/1.45 var(--sans); color: var(--ink-soft); border-left: 1px solid var(--rule); padding-left: 18px; align-self: start; }
+.proof mark { display: inline-block; font: 700 26px/1.15 var(--serif); letter-spacing: -.01em; margin: 0 0 6px; padding: 0 .18em; }
 
-.timeline { border-left: 2px solid var(--line); margin-left: 6px; }
-.entry { position: relative; padding: 0 0 26px 24px; }
-.entry::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
-.entry .when { font-size: 14px; color: var(--muted); }
-.entry h3 { font: 600 17px/1.35 var(--sans); margin: 2px 0; }
-.entry .org { color: var(--muted); font-size: 15px; margin-bottom: 6px; }
-.entry p { margin: 0; font-size: 15px; }
+/* experience and education */
+.rows { margin: 0; }
+.row { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 0 56px; padding: 22px 0; border-top: 1px solid var(--rule); }
+.row:first-child { border-top: 0; padding-top: 0; }
+.row .when { font: 400 15px/1.6 var(--sans); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.row h3 { font: 700 20px/1.3 var(--serif); margin: 0; }
+.row .org { font: 400 15px/1.5 var(--sans); color: var(--ink-soft); margin: 2px 0 8px; }
+.row p { margin: 0; max-width: var(--measure); }
+.grade { margin: 10px 0 8px; font: 400 15px/1.4 var(--sans); color: var(--ink-soft); }
+.grade mark { font: 700 24px/1 var(--serif); margin-right: 4px; }
 
-.edu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.certs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
-.card .when { font-size: 14px; color: var(--muted); }
-.card h3 { font: 600 17px/1.35 var(--sans); margin: 4px 0; }
-.card .org { color: var(--muted); font-size: 15px; }
-.card .grade { margin-top: 10px; font-size: 15px; }
-.card .grade .scale { color: var(--muted); font-size: 13px; }
-.card .grade b { font: 650 22px/1 var(--serif); color: var(--accent-ink); }
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 56px; margin: 0; }
+.skills dt { font: 600 15px/1.4 var(--sans); margin-bottom: 6px; }
+.skills dd { margin: 0; color: var(--ink-soft); }
+.smallgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; margin-top: 48px; }
+.smallgrid h3 { font: 600 15px/1.4 var(--sans); margin: 0 0 10px; }
+.langs, .awards { list-style: none; padding: 0; margin: 0; }
+.langs li, .awards li { padding: 8px 0; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 16px; }
+.langs span, .awards span { color: var(--ink-soft); font: 400 15px/1.6 var(--sans); white-space: nowrap; }
 
-.skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.skills h3 { font: 600 15px/1.3 var(--sans); margin: 0 0 10px; }
-.langs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
-.lang b { display: block; } .lang span { color: var(--muted); font-size: 14px; }
-.awards li { margin-bottom: 8px; }
-.awards span { color: var(--muted); }
+/* contact */
+.contact h2 { font-size: clamp(40px, 6vw, 64px); letter-spacing: -.03em; margin-bottom: 18px; }
+.contact p { max-width: var(--measure); margin: 0 0 28px; }
+footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px/1.5 var(--sans); color: var(--ink-soft); }
 
-.contact { text-align: center; padding: 64px 0 72px; }
-.contact p { color: var(--muted); max-width: 560px; margin: 0 auto 22px; }
-.contact .btns { justify-content: center; }
-footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 40px; }
+/* one moment of motion: the evidence gets highlighted on load */
+@media (prefers-reduced-motion: no-preference) {
+  .hero mark { background: linear-gradient(var(--marker), var(--marker)) no-repeat 0 0 / 0% 100%; animation: sweep .7s .5s cubic-bezier(.3, .7, .3, 1) forwards; }
+  .hero .notes li:nth-child(2) mark { animation-delay: .75s; }
+  .hero .notes li:nth-child(3) mark { animation-delay: 1s; }
+  @keyframes sweep { to { background-size: 100% 100%; } }
+}
 
+@media (max-width: 1000px) {
+  .proj { grid-template-columns: 13rem minmax(0, 1fr); }
+  .proj .proof { grid-column: 2; border-left: 0; padding-left: 0; margin: 20px 0 0; }
+  .proof mark { font-size: 20px; margin-right: 6px; }
+}
 @media (max-width: 760px) {
-  nav .links { display: none; }
-  .hero { grid-template-columns: 1fr; padding-top: 44px; }
-  .hero img { width: 120px; height: 120px; order: -1; }
-  .skills, .edu, .certs { grid-template-columns: 1fr; }
-  .proj img { float: none; width: 100%; margin: 0 0 16px; }
-  .langs { grid-template-columns: repeat(2, 1fr); }
+  body { font-size: 16.5px; }
+  .page { padding: 0 16px; }
+  .bar nav { display: none; }
+  .hero { display: flex; flex-direction: column; padding: 40px 0 56px; }
+  .hero aside { display: contents; }
+  .portrait { order: -1; }
+  .hero h1 { margin-bottom: 28px; }
+  .notes { margin-top: 36px; }
+  .portrait { width: 88px; height: 88px; }
+  .head, .row, .proj, .skills, .smallgrid { grid-template-columns: minmax(0, 1fr); }
+  .head { gap: 8px; }
+  .proj img { margin-bottom: 18px; }
+  .proj .proof { grid-column: 1; }
+  .row .when { margin-bottom: 2px; }
+  .smallgrid { gap: 32px; }
 }
 </style>
 </head>
 <body>
-<nav>
-  <div class="wrap">
-    <a class="logo" href="#">Amrina</a>
-    <div class="links"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#certificates">Certificates</a><a href="#skills">Skills</a><a href="#contact">Contact</a></div>
+<header class="bar">
+  <div class="page">
+    <a class="name" href="#top">Amrina</a>
+    <nav aria-label="Sections"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
   </div>
-</nav>
+</header>
 
-<div class="wrap">
-  <header class="hero">
+<main id="top" class="page">
+  <div class="hero">
+    <h1>Amrina</h1>
     <div>
-      <span class="status">Saarbrücken, Germany · open to roles in EdTech, AI and research</span>
-      <h1>Amrina</h1>
-      <p class="tagline">Educational technologist and AI developer, building AI that helps people learn and that people can trust.</p>
-      <p class="bio">I hold an M.Sc. in Educational Technology from Saarland University, Germany, and two bachelor's degrees in Informatics and English Education. I build LLM applications with retrieval-augmented generation, design digital learning experiences, and study how AI systems can explain things in a way that fits what each learner already knows. My recent projects bring AI into everyday work: internal assistants that cite their sources, GDPR-aware automation and the step-by-step adoption of AI in organisations.</p>
-      <div class="btns">
-        <a class="btn primary" href="#projects">See my projects</a>
-        <a class="btn ghost" href="https://www.linkedin.com/in/amrina-ali-487025119/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11z"/></svg>LinkedIn</a>
-        <a class="btn ghost" href="https://github.com/sayamrina"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a>
+      <p class="lede">Educational technologist and AI developer, building AI that helps people learn and that people can trust.</p>
+      <p class="bio">I hold an M.Sc. in Educational Technology from Saarland University, Germany, and two bachelor's degrees in Informatics and English Education. I build LLM applications with retrieval-augmented generation<a class="ref" href="#n1" aria-label="Note 1">1</a>, design digital learning experiences<a class="ref" href="#n2" aria-label="Note 2">2</a>, and study how AI systems can explain things in a way that fits what each learner already knows<a class="ref" href="#n3" aria-label="Note 3">3</a>. My recent projects bring AI into everyday work: internal assistants that cite their sources, GDPR-aware automation and the step-by-step adoption of AI in organisations.</p>
+      <p class="where">Based in Saarbrücken, Germany. Open to roles in EdTech, AI and research.</p>
+      <div class="actions">
+        <a class="btn solid" href="#projects">See my projects</a>
+        <a class="btn" href="https://www.linkedin.com/in/amrina-ali-487025119/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11z"/></svg>LinkedIn</a>
+        <a class="btn" href="https://github.com/sayamrina"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a>
       </div>
     </div>
-    <img src="img/amrina.jpg" alt="Portrait of Amrina">
-  </header>
-</div>
+    <aside aria-label="Evidence for the introduction">
+      <img class="portrait" src="img/amrina.jpg" alt="Portrait of Amrina">
+      <ol class="notes">
+        <li id="n1"><span class="n">1</span><span><a href="#p-erm">ERM Tutor-AI</a>, my master's thesis. Instructors rated its answers <mark>6.75 / 7</mark>, against 6.00 for ChatGPT-4o.</span></li>
+        <li id="n2"><span class="n">2</span><span><a href="#p-smart">How to be SMART about your goals</a>, a self-paced H5P learning unit, and the <b>AI licence</b> course in <a href="#p-ki">KI-Einführung</a>.</span></li>
+        <li id="n3"><span class="n">3</span><span><a href="#p-whose">Whose Inference?</a>, a research pilot. Knowledge-graph retrieval raised reader prediction from 42% to <mark>61%</mark>.</span></li>
+      </ol>
+    </aside>
+  </div>
 
-<section id="projects">
-  <div class="wrap">
-    <h2>Projects</h2>
-    <p class="sub">From AI for learning and research to websites, web apps and learning design. Filter by category:</p>
+  <section id="projects">
+    <div class="head">
+      <h2>Projects</h2>
+      <p>AI for learning and research, web apps, websites and learning design. Each one links to a live version, a project page or the code.</p>
+    </div>
     <div class="filters" role="group" aria-label="Filter projects by category">
       <button type="button" class="filter" data-f="all" aria-pressed="true">All</button>
-      <button type="button" class="filter" data-f="ai" aria-pressed="false">AI for learning &amp; research</button>
-      <button type="button" class="filter" data-f="apps" aria-pressed="false">Web apps &amp; chatbots</button>
-      <button type="button" class="filter" data-f="web" aria-pressed="false">Websites &amp; CMS</button>
+      <button type="button" class="filter" data-f="ai" aria-pressed="false">AI for learning and research</button>
+      <button type="button" class="filter" data-f="apps" aria-pressed="false">Web apps and chatbots</button>
+      <button type="button" class="filter" data-f="web" aria-pressed="false">Websites and CMS</button>
       <button type="button" class="filter" data-f="design" aria-pressed="false">Learning design</button>
     </div>
 
-    <article class="proj" data-cat="ai apps">
-      <img src="img/erm_tutor.jpg" alt="Screenshot of the ERM Tutor-AI chat interface">
+    <article class="proj" id="p-erm" data-cat="ai apps">
+      <img src="img/erm_tutor.jpg" alt="Screenshot of the ERM Tutor-AI chat interface" loading="lazy">
       <div>
-        <div class="type">Master's thesis · Saarland University</div>
         <h3>ERM Tutor-AI</h3>
+        <p class="kind">Master's thesis, Saarland University</p>
         <p>An AI tutor for the Empirical Research Methods course. It answers from the course's own lecture materials using retrieval-augmented generation, shows students where each answer comes from, and responds like a tutor with reflection and follow-up questions.</p>
         <ul>
-          <li>Rated <b>6.75 / 7</b> by course instructors, against 6.00 for ChatGPT-4o (p &lt; .001)</li>
+          <li>Rated 6.75 / 7 by course instructors, against 6.00 for ChatGPT-4o (p &lt; .001)</li>
           <li>Answers about 30% shorter and more consistent</li>
           <li>Designed in four interface iterations (design-based research)</li>
         </ul>
-        <div class="chips"><span class="chip">Python</span><span class="chip">GPT-4o</span><span class="chip">LangChain</span><span class="chip">ChromaDB</span><span class="chip">Streamlit</span><span class="chip">RAG</span></div>
-        <div class="plinks"><a href="https://erm-tutorai.streamlit.app/">Live app</a><a href="https://sayamrina.github.io/ERM_TutorAI_v4/">Project page</a><a href="https://github.com/sayamrina/ERM_TutorAI_v4">Code</a></div>
+        <p class="stack">Python, GPT-4o, LangChain, ChromaDB, Streamlit, RAG</p>
+        <div class="actions"><a class="btn solid" href="https://erm-tutorai.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/ERM_TutorAI_v4/">Project page</a><a class="btn" href="https://github.com/sayamrina/ERM_TutorAI_v4">Code</a></div>
       </div>
+      <p class="proof"><mark>6.75 / 7</mark><br>instructor rating, against 6.00 for ChatGPT-4o</p>
     </article>
 
-    <article class="proj" data-cat="ai apps">
-      <img src="img/solutiondesk.jpg" alt="Ticket list of SolutionDesk with priority, status and first-response SLA">
+    <article class="proj" id="p-solutiondesk" data-cat="ai apps">
+      <img src="img/solutiondesk.jpg" alt="Ticket list of SolutionDesk with priority, status and first-response SLA" loading="lazy">
       <div>
-        <div class="type">AI project · incident management · Project 2026</div>
         <h3>SolutionDesk: learning platform with a support desk</h3>
+        <p class="kind">AI project, incident management, 2026</p>
         <p>A digital learning platform and the support desk behind it. Every error carries an error code and a request ID; support analyses incidents with structured logs, read-only SQL diagnostics and a knowledge base, then resolves them or escalates to Hosting or Development.</p>
         <ul>
           <li>Ticket workflow with impact × urgency priority, first-response SLA, replies to customers and Jira CSV export</li>
           <li>XML course package import with validation and XXE protection; log analysis by error code and request trail</li>
           <li>Two planted bugs traced from the customer report to the fix in Java, each with a regression test; 43 tests and CI</li>
         </ul>
-        <div class="chips"><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">SQL</span><span class="chip">XML</span><span class="chip">HTML &amp; CSS</span><span class="chip">Docker</span><span class="chip">Incident management</span></div>
-        <div class="plinks"><a href="https://solutiondesk.onrender.com/">Live app</a><a href="https://sayamrina.github.io/solutiondesk/">Project page</a><a href="https://github.com/sayamrina/solutiondesk">Code</a></div>
+        <p class="stack">Java, Spring Boot, SQL, XML, HTML and CSS, Docker, incident management</p>
+        <div class="actions"><a class="btn solid" href="https://solutiondesk.onrender.com/">Live app</a><a class="btn" href="https://sayamrina.github.io/solutiondesk/">Project page</a><a class="btn" href="https://github.com/sayamrina/solutiondesk">Code</a></div>
       </div>
+      <p class="proof"><mark>43 tests</mark><br>two bugs traced from the customer report to the fix</p>
     </article>
 
-    <article class="proj" data-cat="ai apps">
-      <img src="img/ki_einfuehrung.jpg" alt="Project board of the KI-Einführung platform with status, rank and data protection light">
+    <article class="proj" id="p-ki" data-cat="ai apps">
+      <img src="img/ki_einfuehrung.jpg" alt="Project board of the KI-Einführung platform with status, rank and data protection light" loading="lazy">
       <div>
-        <div class="type">AI project · AI adoption · Project 2026</div>
         <h3>KI-Einführung: AI adoption platform</h3>
+        <p class="kind">AI project, AI adoption, 2026</p>
         <p>A platform that mirrors the whole work cycle of an AI Solutions Manager: ideas from business units, process mapping, a data protection check, use case assessment, management decisions, testing, a 90-day plan, employee training and an AI radar. German by default, with English as an option.</p>
         <ul>
           <li>Five roles (business unit, AI manager, data protection, IT, management) with their own permissions; data protection and IT approve separately before management decides</li>
           <li>Personal data replaced before every model call; a knowledge assistant answers only from approved documents and names the source</li>
           <li>"AI licence" course with final test, PDF certificate and trainer analytics; decision paper as PDF; 28 tests and CI</li>
         </ul>
-        <div class="chips"><span class="chip">Python</span><span class="chip">Streamlit</span><span class="chip">LLMs</span><span class="chip">GDPR</span><span class="chip">Change management</span><span class="chip">E-learning</span></div>
-        <div class="plinks"><a href="https://ki-einfuehrung-amrina.streamlit.app/">Live app</a><a href="https://sayamrina.github.io/ki-einfuehrung/">Project page</a><a href="https://github.com/sayamrina/ki-einfuehrung">Code</a></div>
+        <p class="stack">Python, Streamlit, LLMs, GDPR, change management, e-learning</p>
+        <div class="actions"><a class="btn solid" href="https://ki-einfuehrung-amrina.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/ki-einfuehrung/">Project page</a><a class="btn" href="https://github.com/sayamrina/ki-einfuehrung">Code</a></div>
       </div>
+      <p class="proof"><mark>5 roles</mark><br>data protection and IT approve before management decides</p>
     </article>
 
-    <article class="proj" data-cat="ai apps">
-      <img src="img/ai_ops.jpg" alt="Ticket triage screen of the Internal AI Ops Assistant">
+    <article class="proj" id="p-ops" data-cat="ai apps">
+      <img src="img/ai_ops.jpg" alt="Ticket triage screen of the Internal AI Ops Assistant" loading="lazy">
       <div>
-        <div class="type">AI engineering · automation · Project 2026</div>
         <h3>Internal AI Ops Assistant</h3>
+        <p class="kind">AI engineering and automation, 2026</p>
         <p>An internal AI service for a healthcare company: it answers policy questions with sources, turns incoming documents into validated data and triages Jira tickets to Microsoft Teams. Personal data is removed before every model call, and sensitive cases go to a human review queue.</p>
         <ul>
           <li>All answerable questions answered with the correct source; 44 of 44 document fields extracted correctly (small self-made test sets)</li>
           <li>GDPR pseudonymisation, role-based API keys, HMAC-signed webhooks, audit trail and Prometheus metrics</li>
           <li>Connectors for Jira, Teams, Confluence, SharePoint and Nextcloud, plus an n8n workflow; 23 tests and CI</li>
         </ul>
-        <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">LLMs &amp; RAG</span><span class="chip">GDPR</span><span class="chip">Docker</span><span class="chip">GitHub Actions</span><span class="chip">n8n</span></div>
-        <div class="plinks"><a href="https://ops-assistant.streamlit.app/">Live app</a><a href="https://sayamrina.github.io/ai-ops-assistant/">Project page</a><a href="https://github.com/sayamrina/ai-ops-assistant">Code</a></div>
+        <p class="stack">Python, FastAPI, LLMs and RAG, GDPR, Docker, GitHub Actions, n8n</p>
+        <div class="actions"><a class="btn solid" href="https://ops-assistant.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/ai-ops-assistant/">Project page</a><a class="btn" href="https://github.com/sayamrina/ai-ops-assistant">Code</a></div>
       </div>
+      <p class="proof"><mark>44 of 44</mark><br>document fields extracted correctly in a small test set</p>
     </article>
 
-    <article class="proj" data-cat="ai">
-      <img src="img/whose_inference.jpg" alt="Chart: steering a language model toward the user's perspective">
+    <article class="proj" id="p-whose" data-cat="ai">
+      <img src="img/whose_inference.jpg" alt="Chart: steering a language model toward the user's perspective" loading="lazy">
       <div>
-        <div class="type">Research pilot · NLP</div>
         <h3>Whose Inference?</h3>
+        <p class="kind">Research pilot, natural language processing</p>
         <p>The same sentence means different things to different readers. This pilot predicts how a specific reader will interpret a statistical statement from a personal knowledge base of what they know and believe, rewrites the statement so it is not misread, and looks inside a language model to see how it uses that knowledge.</p>
         <ul>
           <li>Knowledge-graph retrieval raises reader-prediction accuracy from 42% to 61% (75% with GPT-4o)</li>
           <li>RSA-style cooperative rephrasing with a simulated listener</li>
           <li>Activation patching and steering on Qwen2.5-0.5B</li>
         </ul>
-        <div class="chips"><span class="chip">LLMs</span><span class="chip">Knowledge graphs</span><span class="chip">Rational Speech Acts</span><span class="chip">Interpretability</span><span class="chip">PyTorch</span></div>
-        <div class="plinks"><a href="https://whose-inference.streamlit.app/">Live app</a><a href="https://sayamrina.github.io/whose-inference/">Project page</a><a href="https://github.com/sayamrina/whose-inference">Code &amp; report</a></div>
+        <p class="stack">LLMs, knowledge graphs, Rational Speech Acts, interpretability, PyTorch</p>
+        <div class="actions"><a class="btn solid" href="https://whose-inference.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/whose-inference/">Project page</a><a class="btn" href="https://github.com/sayamrina/whose-inference">Code and report</a></div>
       </div>
+      <p class="proof"><mark>42% to 61%</mark><br>reader-prediction accuracy with knowledge-graph retrieval</p>
     </article>
-    <article class="proj" data-cat="web">
-      <img src="img/fluvenco.jpg" alt="Home page of the multilingual Fluvenco website built with TYPO3">
+
+    <article class="proj" id="p-typo3" data-cat="web">
+      <img src="img/fluvenco.jpg" alt="Home page of the multilingual Fluvenco website built with TYPO3" loading="lazy">
       <div>
-        <div class="type">Website · TYPO3 CMS · Project 2026</div>
         <h3>Multilingual corporate website with TYPO3</h3>
+        <p class="kind">Website, TYPO3 CMS, 2026</p>
         <p>A website in English, German and French for Fluvenco, a fictional manufacturer of hydraulic components. Besides the site itself, the project covers the work around it: an editor guide, a translation and approval process for launching country websites, SEO and automated quality checks.</p>
         <ul>
           <li>Own TYPO3 13 LTS sitepackage: Fluid templates, TypoScript, site sets and two custom content elements</li>
           <li>Connected translations, localized URLs, hreflang, sitemap and editor groups per language</li>
           <li>Automated QA of all 45 pages: links, SEO tags, alt texts and WCAG 2.1 AA, with 0 issues</li>
         </ul>
-        <div class="chips"><span class="chip">TYPO3 13</span><span class="chip">Fluid</span><span class="chip">TypoScript</span><span class="chip">Multilingual</span><span class="chip">SEO</span><span class="chip">Accessibility</span><span class="chip">Playwright</span></div>
-        <div class="plinks"><a href="https://sayamrina.github.io/fluvenco-typo3/site/en/">View website</a><a href="https://sayamrina.github.io/fluvenco-typo3/">Project page</a><a href="https://github.com/sayamrina/fluvenco-typo3">Code &amp; editor guide</a></div>
+        <p class="stack">TYPO3 13, Fluid, TypoScript, multilingual, SEO, accessibility, Playwright</p>
+        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/fluvenco-typo3/site/en/">View website</a><a class="btn" href="https://sayamrina.github.io/fluvenco-typo3/">Project page</a><a class="btn" href="https://github.com/sayamrina/fluvenco-typo3">Code and editor guide</a></div>
       </div>
+      <p class="proof"><mark>0 issues</mark><br>in automated checks of all 45 pages, including WCAG 2.1 AA</p>
     </article>
 
-    <article class="proj" data-cat="apps">
-      <img src="img/hotel_assistant.jpg" alt="Screenshot of Victoria, the breakfast ordering assistant of Hotel Madeleine">
+    <article class="proj" id="p-victoria" data-cat="apps">
+      <img src="img/hotel_assistant.jpg" alt="Screenshot of Victoria, the breakfast ordering assistant of Hotel Madeleine" loading="lazy">
       <div>
-        <div class="type">Web app · hospitality · demo</div>
         <h3>Victoria: breakfast ordering assistant</h3>
+        <p class="kind">Web app for a hotel, demo</p>
         <p>A chat-style assistant that lets hotel guests order a made-to-order organic breakfast from their phone, and a live dashboard that turns the orders into a printable kitchen sheet. Designed to cut food waste compared with a buffet.</p>
         <ul>
           <li>Guests scan a QR code, choose German, English or French, and are guided step by step: room number, breakfast basis, extras and allergies</li>
           <li>Orders sync in real time to a PIN-protected staff dashboard</li>
           <li>One-click, one-page PDF of all orders for the kitchen</li>
         </ul>
-        <div class="chips"><span class="chip">Conversational UX</span><span class="chip">React</span><span class="chip">Tailwind CSS</span><span class="chip">Firebase Firestore</span><span class="chip">jsPDF</span><span class="chip">Multilingual</span></div>
-        <div class="plinks"><a href="https://hotel-madeleine-breakfast-assistant.ai.studio/">Try the demo</a></div>
+        <p class="stack">Conversational UX, React, Tailwind CSS, Firebase Firestore, jsPDF, multilingual</p>
+        <div class="actions"><a class="btn solid" href="https://hotel-madeleine-breakfast-assistant.ai.studio/">Try the demo</a></div>
       </div>
+      <p class="proof"><mark>3 languages</mark><br>orders reach the kitchen in real time</p>
     </article>
 
-    <article class="proj" data-cat="design">
-      <img src="img/smart_goals.jpg" alt="Screenshot of the interactive e-learning unit How to be SMART about your goals">
+    <article class="proj" id="p-smart" data-cat="design">
+      <img src="img/smart_goals.jpg" alt="Screenshot of the interactive e-learning unit How to be SMART about your goals" loading="lazy">
       <div>
-        <div class="type">Instructional design · M.Sc. Educational Technology</div>
         <h3>How to be SMART about your goals</h3>
+        <p class="kind">Instructional design, M.Sc. Educational Technology</p>
         <p>A self-paced e-learning unit that teaches students to set SMART goals for their academic and everyday life. I designed the learning objectives, structure and activities, and built the unit as an interactive H5P book.</p>
         <ul>
           <li>Clear learning objectives and a short theory section before practice</li>
           <li>One section per SMART criterion: self-paced resources, then a task on that criterion</li>
           <li>Ends with "Your turn!": learners write a SMART goal for their own life, then a summary</li>
         </ul>
-        <div class="chips"><span class="chip">Instructional design</span><span class="chip">H5P Interactive Book</span><span class="chip">Self-regulated learning</span><span class="chip">Lumi</span></div>
-        <div class="plinks"><a href="https://app.lumi.education/run/S-stqM">Try the learning unit</a></div>
+        <p class="stack">Instructional design, H5P Interactive Book, self-regulated learning, Lumi</p>
+        <div class="actions"><a class="btn solid" href="https://app.lumi.education/run/S-stqM">Try the learning unit</a></div>
       </div>
+      <p class="proof"><mark>5 tasks</mark><br>one for each SMART criterion, then learners write their own goal</p>
     </article>
-  </div>
-</section>
+  </section>
 
-<section id="experience">
-  <div class="wrap">
-    <h2>Experience</h2>
-    <p class="sub">Ten years at the meeting point of education and technology.</p>
-    <div class="timeline">
-      <div class="entry"><div class="when">2020 – 2025 · remote</div><h3>Website Manager</h3><div class="org">DKLPT, an association for inter-university collaboration of lecturers, Indonesia</div><p>Designed and built the association's website with WordPress, set up domain and hosting, and managed its content for academic audiences for five years.</p></div>
-      <div class="entry"><div class="when">2023 – 2024</div><h3>Teaching Assistant, Python</h3><div class="org">Department of Educational Technology, Saarland University</div><p>Supported students in Python courses with exercises and projects, and taught data structures, algorithms and debugging.</p></div>
-      <div class="entry"><div class="when">2020 – 2022</div><h3>Web Developer &amp; Marketing Officer</h3><div class="org">Global Ehsan Relief (NGO), Indonesia</div><p>Developed and maintained the organisation's WordPress website: new features, updates, security, backups and performance, and wrote SEO-friendly content so donors could find the organisation online.</p></div>
-      <div class="entry"><div class="when">2018 – 2020</div><h3>Educational Mentor &amp; Program Officer</h3><div class="org">Bank BRI Foundation (YBM), Indonesia</div><p>Planned and ran education and aid programmes, and mentored groups of scholarship students.</p></div>
-      <div class="entry"><div class="when">2016 – 2018</div><h3>Educational Consultant</h3><div class="org">Ruangguru, Indonesia's largest EdTech company</div><p>Built school partnerships and trained teachers and students to use digital learning tools.</p></div>
+  <section id="experience">
+    <div class="head">
+      <h2>Experience</h2>
+      <p>Ten years at the meeting point of education and technology.</p>
     </div>
-  </div>
-</section>
+    <div class="rows">
+      <div class="row"><div class="when">2020 to 2025, remote</div><div><h3>Website Manager</h3><div class="org">DKLPT, an association for inter-university collaboration of lecturers, Indonesia</div><p>Designed and built the association's website with WordPress, set up domain and hosting, and managed its content for academic audiences for five years.</p></div></div>
+      <div class="row"><div class="when">2023 to 2024</div><div><h3>Teaching Assistant, Python</h3><div class="org">Department of Educational Technology, Saarland University</div><p>Supported students in Python courses with exercises and projects, and taught data structures, algorithms and debugging.</p></div></div>
+      <div class="row"><div class="when">2020 to 2022</div><div><h3>Web Developer and Marketing Officer</h3><div class="org">Global Ehsan Relief (NGO), Indonesia</div><p>Developed and maintained the organisation's WordPress website: new features, updates, security, backups and performance, and wrote SEO-friendly content so donors could find the organisation online.</p></div></div>
+      <div class="row"><div class="when">2018 to 2020</div><div><h3>Educational Mentor and Program Officer</h3><div class="org">Bank BRI Foundation (YBM), Indonesia</div><p>Planned and ran education and aid programmes, and mentored groups of scholarship students.</p></div></div>
+      <div class="row"><div class="when">2016 to 2018</div><div><h3>Educational Consultant</h3><div class="org">Ruangguru, Indonesia's largest EdTech company</div><p>Built school partnerships and trained teachers and students to use digital learning tools.</p></div></div>
+    </div>
+  </section>
 
-<section id="education">
-  <div class="wrap">
-    <h2>Education</h2>
-    <p class="sub">A technical foundation in informatics, and a pedagogical one in teaching and learning.</p>
-    <div class="edu">
-      <div class="card"><div class="when">2022 – 2025</div><h3>M.Sc. Educational Technology</h3><div class="org">Saarland University, Germany</div><div class="grade"><b>1.4</b> / 1.0 · very good<br><span class="scale">German scale, 1.0 is the best grade</span></div><p class="org" style="margin-top:8px">Instructional design, multimedia learning, AI in education, empirical methods, eye tracking, machine learning for NLP. DAAD scholarship.</p></div>
-      <div class="card"><div class="when">2012 – 2016</div><h3>Bachelor of Computer Science (S.Kom.)</h3><div class="org">Syiah Kuala University, Indonesia</div><div class="grade"><b>3.43</b> / 4.00</div><p class="org" style="margin-top:8px">Software engineering, databases, algorithms, web programming.</p></div>
-      <div class="card"><div class="when">2012 – 2018</div><h3>Bachelor of Education (S.Pd.), English</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><div class="grade"><b>3.4</b> / 4.0</div><p class="org" style="margin-top:8px">Pedagogy and curriculum design.</p></div>
+  <section id="education">
+    <div class="head">
+      <h2>Education</h2>
+      <p>A technical foundation in informatics, and a pedagogical one in teaching and learning.</p>
     </div>
-  </div>
-</section>
+    <div class="rows">
+      <div class="row"><div class="when">2022 to 2025</div><div><h3>M.Sc. Educational Technology</h3><div class="org">Saarland University, Germany</div><div class="grade"><mark>1.4</mark> very good, on the German scale where 1.0 is the best grade</div><p>Instructional design, multimedia learning, AI in education, empirical methods, eye tracking, machine learning for NLP. DAAD scholarship.</p></div></div>
+      <div class="row"><div class="when">2012 to 2016</div><div><h3>Bachelor of Computer Science (S.Kom.)</h3><div class="org">Syiah Kuala University, Indonesia</div><div class="grade"><mark>3.43</mark> of 4.00</div><p>Software engineering, databases, algorithms, web programming.</p></div></div>
+      <div class="row"><div class="when">2012 to 2018</div><div><h3>Bachelor of Education (S.Pd.), English</h3><div class="org">Ar-Raniry State Islamic University, Indonesia</div><div class="grade"><mark>3.4</mark> of 4.0</div><p>Pedagogy and curriculum design.</p></div></div>
+    </div>
+  </section>
 
-<section id="certificates">
-  <div class="wrap">
-    <h2>Certificates &amp; training</h2>
-    <p class="sub">Courses beyond my degrees. The full collection is on my <a href="https://amrinaali.notion.site/The-Certificate-Shelf-33557328c9ff80d8848cc991b29637eb">Certificate Shelf</a>.</p>
-    <div class="certs">
-      <div class="card"><div class="when">Jul – Aug 2022 · 80 hours</div><h3>Professional Academy: Go programming</h3><div class="org">Digital Talent Scholarship, Indonesian Ministry of Communication and Informatics (Kominfo) with Progate</div><p class="org" style="margin-top:8px">Git, HTML &amp; CSS, Go (four modules), a team web project and a final project.</p></div>
-      <div class="card"><div class="when">Jul 2022</div><h3>HTML &amp; CSS course</h3><div class="org">Progate</div><p class="org" style="margin-top:8px">Fundamentals of HTML and CSS: four lessons and three exercises. <a href="https://progate.com/course_certificate/03bb257arfoda5">Verify</a></p></div>
+  <section id="certificates">
+    <div class="head">
+      <h2>Certificates</h2>
+      <p>Courses beyond my degrees. The full collection is on my <a href="https://amrinaali.notion.site/The-Certificate-Shelf-33557328c9ff80d8848cc991b29637eb">Certificate Shelf</a>.</p>
     </div>
-  </div>
-</section>
+    <div class="rows">
+      <div class="row"><div class="when">Jul to Aug 2022, 80 hours</div><div><h3>Professional Academy: Go programming</h3><div class="org">Digital Talent Scholarship, Indonesian Ministry of Communication and Informatics (Kominfo) with Progate</div><p>Git, HTML and CSS, Go (four modules), a team web project and a final project.</p></div></div>
+      <div class="row"><div class="when">Jul 2022</div><div><h3>HTML and CSS course</h3><div class="org">Progate</div><p>Fundamentals of HTML and CSS: four lessons and three exercises. <a href="https://progate.com/course_certificate/03bb257arfoda5">Verify the certificate</a></p></div></div>
+    </div>
+  </section>
 
-<section id="skills">
-  <div class="wrap">
-    <h2>Skills</h2>
-    <p class="sub">What I use to build, teach and evaluate.</p>
-    <div class="skills">
-      <div class="card"><h3>AI &amp; programming</h3><div class="chips"><span class="chip">Python</span><span class="chip">LLMs &amp; prompt engineering</span><span class="chip">RAG</span><span class="chip">LangChain</span><span class="chip">Vector databases</span><span class="chip">PyTorch / Transformers</span><span class="chip">Streamlit</span><span class="chip">FastAPI</span><span class="chip">Docker</span><span class="chip">HTML &amp; CSS</span><span class="chip">Go (basics)</span><span class="chip">Git</span><span class="chip">WordPress</span><span class="chip">TYPO3</span><span class="chip">SEO</span></div></div>
-      <div class="card"><h3>Learning design &amp; e-learning</h3><div class="chips"><span class="chip">Instructional design</span><span class="chip">Design thinking</span><span class="chip">LMS administration</span><span class="chip">Articulate 360</span><span class="chip">H5P</span><span class="chip">Adobe Captivate</span></div></div>
-      <div class="card"><h3>Research &amp; data</h3><div class="chips"><span class="chip">Empirical research methods</span><span class="chip">Statistics (ANOVA, regression)</span><span class="chip">Eye tracking</span><span class="chip">Tableau</span><span class="chip">Google Analytics</span></div></div>
-      <div class="card"><h3>Design &amp; collaboration</h3><div class="chips"><span class="chip">Figma</span><span class="chip">Miro</span><span class="chip">Canva</span><span class="chip">Illustrator</span><span class="chip">OBS &amp; Audacity</span><span class="chip">Jira / Trello</span><span class="chip">Microsoft 365</span></div></div>
+  <section id="skills">
+    <div class="head">
+      <h2>Skills</h2>
+      <p>What I use to build, teach and evaluate.</p>
     </div>
-    <div class="langs">
-      <div class="lang"><b>Indonesian</b><span>native</span></div>
-      <div class="lang"><b>English</b><span>fluent</span></div>
-      <div class="lang"><b>German</b><span>B2</span></div>
-      <div class="lang"><b>Arabic</b><span>basic</span></div>
+    <dl class="skills">
+      <div><dt>AI and programming</dt><dd>Python, LLMs and prompt engineering, RAG, LangChain, vector databases, PyTorch and Transformers, Streamlit, FastAPI, Docker, HTML and CSS, Go (basics), Git, WordPress, TYPO3, SEO</dd></div>
+      <div><dt>Learning design and e-learning</dt><dd>Instructional design, design thinking, LMS administration, Articulate 360, H5P, Adobe Captivate</dd></div>
+      <div><dt>Research and data</dt><dd>Empirical research methods, statistics (ANOVA, regression), eye tracking, Tableau, Google Analytics</dd></div>
+      <div><dt>Design and collaboration</dt><dd>Figma, Miro, Canva, Illustrator, OBS and Audacity, Jira and Trello, Microsoft 365</dd></div>
+    </dl>
+    <div class="smallgrid">
+      <div>
+        <h3>Languages</h3>
+        <ul class="langs">
+          <li>Indonesian <span>native</span></li>
+          <li>English <span>fluent</span></li>
+          <li>German <span>B2</span></li>
+          <li>Arabic <span>basic</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Awards</h3>
+        <ul class="awards">
+          <li>DAAD-ACEH Scholarship of Excellence for master's studies in Germany <span>2022 to 2024</span></li>
+          <li>2nd place, Australia–Indonesia Youth Exchange Program (AIYEP) <span>2017</span></li>
+          <li>Karya Salemba Empat educational scholarship <span>2015 to 2016</span></li>
+        </ul>
+      </div>
     </div>
-    <h3 style="margin:32px 0 10px">Awards</h3>
-    <ul class="awards">
-      <li>DAAD-ACEH Scholarship of Excellence for master's studies in Germany <span>· 2022–2024</span></li>
-      <li>2nd place, Australia–Indonesia Youth Exchange Program (AIYEP) <span>· 2017</span></li>
-      <li>Karya Salemba Empat educational scholarship <span>· 2015–2016</span></li>
-    </ul>
-  </div>
-</section>
+  </section>
 
-<section id="contact" class="contact">
-  <div class="wrap">
+  <section id="contact" class="contact">
     <h2>Let's talk</h2>
     <p>I am looking for roles in educational technology, AI and LLM engineering, learning design, or a funded PhD position. Based in Saarbrücken and available to start right away.</p>
-    <div class="btns">
-      <a class="btn primary" href="mailto:its.amrinaali@gmail.com">Email me</a>
-      <a class="btn ghost" href="https://www.linkedin.com/in/amrina-ali-487025119/">LinkedIn</a>
-      <a class="btn ghost" href="https://github.com/sayamrina">GitHub</a>
+    <div class="actions">
+      <a class="btn solid" href="mailto:its.amrinaali@gmail.com">Email me</a>
+      <a class="btn" href="https://www.linkedin.com/in/amrina-ali-487025119/">LinkedIn</a>
+      <a class="btn" href="https://github.com/sayamrina">GitHub</a>
     </div>
-  </div>
-</section>
-<footer>© 2026 Amrina</footer>
+  </section>
+</main>
+<footer><div class="page">© 2026 Amrina</div></footer>
 <script>
 (function () {
   var buttons = document.querySelectorAll('.filter');
@@ -366,6 +429,10 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 0 
         c.hidden = f !== 'all' && c.getAttribute('data-cat').split(' ').indexOf(f) === -1;
       });
     });
+  });
+  // the hero notes link to projects that a filter may have hidden
+  document.querySelectorAll('.notes a[href^="#p-"]').forEach(function (a) {
+    a.addEventListener('click', function () { buttons[0].click(); });
   });
 })();
 </script>
