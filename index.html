@@ -217,6 +217,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>6.75 / 7</mark><br>instructor rating, against 6.00 for ChatGPT-4o</p>
     </article>
 
+    <article class="proj" id="p-rmn" data-cat="ai apps">
+      <img src="img/rmn_ai_assistent.jpg" alt="RMN AI Assistent: chat answer with a receipt of the documents and stock records it used" loading="lazy">
+      <div>
+        <h3>RMN AI Assistent: AI colleague for a restaurant team</h3>
+        <p class="kind">AI project, chat assistant and automation, 2026</p>
+        <p>An AI assistant for the staff of a fictional Indonesian restaurant in Saarbrücken. It answers questions about dishes, allergens, hygiene rules and catering from the restaurant's own documents, looks up stock and free tables through a REST API, proposes supplier orders and turns guest e-mails into checked reply drafts.</p>
+        <ul>
+          <li>RAG with sources: every answer shows which document sections and system records it used, and it refuses when nothing matches</li>
+          <li>Tool calling with six read-only tools; order quantities, approval limits, opening hours and seat capacity are computed in code, not by the model</li>
+          <li>Runs with OpenAI or a self-hosted model through an OpenAI-compatible API, or without a model in demo mode; 16 tests, CI and Docker</li>
+        </ul>
+        <p class="stack">Python, FastAPI, React, TypeScript, RAG, tool calling, SQLite, Docker</p>
+        <div class="actions"><a class="btn solid" href="https://rmn-ai-assistent.onrender.com/">Live app</a><a class="btn" href="https://sayamrina.github.io/rmn-ai-assistent/">Project page</a><a class="btn" href="https://github.com/sayamrina/rmn-ai-assistent">Code</a></div>
+      </div>
+      <p class="proof"><mark>6 tools</mark><br>read-only; prices, stock rules and capacity are computed in code</p>
+    </article>
+
     <article class="proj" id="p-solutiondesk" data-cat="ai apps">
       <img src="img/solutiondesk.jpg" alt="Ticket list of SolutionDesk with priority, status and first-response SLA" loading="lazy">
       <div>
