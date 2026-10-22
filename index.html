@@ -217,6 +217,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>6.75 / 7</mark><br>instructor rating, against 6.00 for ChatGPT-4o</p>
     </article>
 
+    <article class="proj" id="p-metalens" data-cat="ai">
+      <img src="img/metadata_lens.jpg" alt="Metadata Lens overview: completeness of Dublin Core fields per repository" loading="lazy">
+      <div>
+        <h3>Metadata Lens: quality and knowledge graph for research metadata</h3>
+        <p class="kind">Research data project, 2026, rebuilt every week from live repository data</p>
+        <p>Harvests real publication metadata from the JuSER (Forschungszentrum Jülich) and KITopen repositories over OAI-PMH, checks it against the OpenAIRE guidelines, maps it to Schema.org and DCAT and builds an RDF knowledge graph that you can query with SPARQL directly in the browser.</p>
+        <ul>
+          <li>Polite OAI-PMH harvester with resumption tokens; 17 quality rules for identifiers, access rights, licences, dates and languages, each with a severity and a score</li>
+          <li>Semi-automatic curation: proposed fixes such as ISO dates and canonical licence URIs, duplicate detection and publisher spellings, accepted or rejected by a person and exported as JSON</li>
+          <li>Weekly GitHub Actions pipeline and an Airflow DAG; Next.js and TypeScript app with Oxigraph (WebAssembly) for SPARQL; tests for the pipeline and every example query</li>
+        </ul>
+        <p class="stack">Python, OAI-PMH, Dublin Core, Schema.org, DCAT, RDF, SPARQL, Next.js, TypeScript, Airflow</p>
+        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/metadata-lens/">Live app</a><a class="btn" href="https://sayamrina.github.io/metadata-lens/about/">Project page</a><a class="btn" href="https://github.com/sayamrina/metadata-lens">Code</a></div>
+      </div>
+      <p class="proof"><mark>800 records</mark><br>harvested from two research repositories, about 50,000 triples</p>
+    </article>
+
     <article class="proj" id="p-rmn" data-cat="ai apps">
       <img src="img/rmn_ai_assistent.jpg" alt="RMN AI Assistent: chat answer with a receipt of the documents and stock records it used" loading="lazy">
       <div>
