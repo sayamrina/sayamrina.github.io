@@ -235,6 +235,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>800 records</mark><br>harvested from two research repositories and rebuilt every week</p>
     </article>
 
+    <article class="proj" id="p-range" data-cat="ai apps">
+      <img src="img/range_atlas.jpg" alt="Range Atlas map: records of the Italian locust over a climate suitability surface across Europe" loading="lazy">
+      <div>
+        <h3>Range Atlas: species distribution maps from open biodiversity data</h3>
+        <p class="kind">Research data project, 2026, rebuilt every week from GBIF and OBIS</p>
+        <p>Maps where ten European grasshoppers and crickets, and two marine species, have been recorded since 2000 and models where the climate suits them. Every step from the raw records to the map is visible: quality checks, model scores, run history and the data itself.</p>
+        <ul>
+          <li>Darwin Core records from the GBIF and OBIS APIs in a Parquet lakehouse (local or S3); quality checks in DuckDB SQL; WorldClim predictors attached with Dask</li>
+          <li>GLM and Random Forest against a target-group background, scored with spatial block cross-validation; response curves and predictor importance per species</li>
+          <li>FastAPI on PostGIS with vector tiles (ST_AsMVT, cached, ETags) and model runs locally or on AWS Batch; React, TypeScript and MapLibre app with DuckDB in the browser; tests in CI, weekly GitHub Actions rebuild</li>
+        </ul>
+        <p class="stack">Python, DuckDB, Parquet, Dask, scikit-learn, PostgreSQL/PostGIS, FastAPI, React, TypeScript, MapLibre, Docker, AWS (S3, Batch)</p>
+        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/range-atlas/">Live app</a><a class="btn" href="https://sayamrina.github.io/range-atlas/#/about">Project page</a><a class="btn" href="https://github.com/sayamrina/range-atlas">Code</a></div>
+      </div>
+      <p class="proof"><mark>12 species</mark><br>mapped from GBIF and OBIS records, ten of them modelled</p>
+    </article>
+
     <article class="proj" id="p-rmn" data-cat="ai apps">
       <img src="img/rmn_ai_assistent.jpg" alt="RMN AI Assistent: chat answer with a receipt of the documents and stock records it used" loading="lazy">
       <div>
