@@ -86,6 +86,7 @@ h2 { font: 700 34px/1.1 var(--serif); letter-spacing: -.015em; margin: 0; }
 .proj-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 40px; }
 .proj { display: flex; flex-direction: column; padding-top: 24px; border-top: 1px solid var(--rule); }
 .proj[hidden] { display: none; }
+.more { display: flex; justify-content: center; margin-top: 44px; }
 .proj img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; object-position: top left; border-radius: 4px; border: 1px solid var(--rule); background: var(--screen); display: block; margin-bottom: 14px; }
 .proj > div { display: flex; flex-direction: column; flex: 1; }
 .proj h3 { font: 700 22px/1.2 var(--serif); letter-spacing: -.01em; margin: 0 0 4px; }
@@ -216,6 +217,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
         <div class="actions"><a class="btn solid" href="https://erm-tutorai.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/ERM_TutorAI_v4/">Project page</a><a class="btn" href="https://github.com/sayamrina/ERM_TutorAI_v4">Code</a></div>
       </div>
       <p class="proof"><mark>6.75 / 7</mark><br>instructor rating, against 6.00 for ChatGPT-4o</p>
+    </article>
+
+    <article class="proj" id="p-kpa" data-cat="design web">
+      <img src="img/kpa_lms.jpg" alt="Kita Paham AI Academy home page: three AI literacy modules with their chapters" loading="lazy">
+      <div>
+        <h3>Kita Paham AI Academy: a Moodle LMS for AI literacy</h3>
+        <p class="kind">Learning platform, 2026, self-hosted Moodle 5.3</p>
+        <p>A working Moodle site with three trial modules on AI literacy that I researched and wrote, with the sources listed in every chapter. At login, visitors choose student, lecturer or admin and get a view that fits that role.</p>
+        <ul>
+          <li>3 modules, 9 chapters and 45 quiz questions with feedback on every answer; each chapter opens after the quiz of the one before, with completion tracking</li>
+          <li>Own Moodle theme with an English and German interface, light and dark mode, and role dashboards built on live Moodle data</li>
+          <li>Docker deployment with automatic HTTPS, hardened containers and a nightly reset of the public demo accounts</li>
+        </ul>
+        <p class="stack">Moodle 5.3, PHP, Mustache, SCSS, PostgreSQL, Docker, Caddy, instructional design</p>
+        <div class="actions"><a class="btn solid" href="https://kpacademy.duckdns.org/">Live LMS</a><a class="btn" href="https://kpacademy.duckdns.org/login/index.php">Try a demo role</a></div>
+      </div>
+      <p class="proof"><mark>9 chapters</mark><br>each with sources, a quiz and a hands-on task</p>
     </article>
 
     <article class="proj" id="p-metalens" data-cat="ai">
@@ -388,6 +406,7 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>5 tasks</mark><br>one for each SMART criterion, then learners write their own goal</p>
     </article>
     </div>
+    <div class="more"><button type="button" class="btn" id="proj-more" aria-controls="projects" aria-expanded="false" hidden></button></div>
   </section>
 
   <section id="experience">
@@ -472,21 +491,54 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
 <footer><div class="page">© 2026 Amrina</div></footer>
 <script>
 (function () {
+  var LIMIT = 4;
   var buttons = document.querySelectorAll('.filter');
-  var cards = document.querySelectorAll('.proj[data-cat]');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.proj[data-cat]'));
+  var more = document.getElementById('proj-more');
+  var filter = 'all';
+  var expanded = false;
+
+  function render() {
+    var matches = cards.filter(function (c) {
+      return filter === 'all' || c.getAttribute('data-cat').split(' ').indexOf(filter) !== -1;
+    });
+    cards.forEach(function (c) {
+      var i = matches.indexOf(c);
+      c.hidden = i === -1 || (!expanded && i >= LIMIT);
+    });
+    more.hidden = matches.length <= LIMIT;
+    more.setAttribute('aria-expanded', String(expanded));
+    more.textContent = expanded ? 'Show less' : 'Show more';
+  }
+
   buttons.forEach(function (b) {
     b.addEventListener('click', function () {
-      var f = b.getAttribute('data-f');
+      filter = b.getAttribute('data-f');
+      expanded = false;
       buttons.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-      cards.forEach(function (c) {
-        c.hidden = f !== 'all' && c.getAttribute('data-cat').split(' ').indexOf(f) === -1;
-      });
+      render();
     });
   });
-  // the hero notes link to projects that a filter may have hidden
-  document.querySelectorAll('.notes a[href^="#p-"]').forEach(function (a) {
-    a.addEventListener('click', function () { buttons[0].click(); });
+
+  more.addEventListener('click', function () {
+    expanded = !expanded;
+    render();
+    if (!expanded) { document.getElementById('projects').scrollIntoView({ block: 'start' }); }
   });
+
+  // the hero notes link to projects that a filter or the limit may have hidden
+  document.querySelectorAll('.notes a[href^="#p-"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      filter = 'all';
+      expanded = true;
+      buttons.forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-f') === 'all')); });
+      render();
+    });
+  });
+
+  // a link straight to a project (…/#p-typo3) should show it even if it is not among the first four
+  if (/^#p-/.test(location.hash) && cards.indexOf(document.querySelector(location.hash)) >= LIMIT) { expanded = true; }
+  render();
 })();
 </script>
 </body>
