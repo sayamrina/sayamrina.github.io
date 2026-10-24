@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kita Paham AI Academy</title>
+<meta name="description" content="A self-hosted Moodle 5.3 LMS for AI literacy: three modules, three roles with their own view, open badges, completion tracking and a learning analytics plugin.">
+<style>
+@font-face { font-family:"Plus Jakarta Sans"; font-weight:200 800; font-display:swap; src:url(fonts/plus-jakarta-sans-latin-wght-normal.woff2) format("woff2"); }
+:root { color-scheme:light;
+  --ink:#142033; --sea:#0B6E79; --mist:#EAF2F6; --sky:#C6E6F2; --leaf:#2F7D4F; --paper:#fff; --muted:#4A5568; --rule:#D5E1EA;
+  --sans:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono:ui-monospace, Menlo, Consolas, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme:dark;
+  --ink:#E6EDF5; --sea:#5CC3CE; --mist:#17233A; --sky:#2B5F73; --leaf:#6CC08E; --paper:#0F1726; --muted:#A9B6C6; --rule:#2A3A54; } }
+:root[data-theme="dark"] { color-scheme:dark;
+  --ink:#E6EDF5; --sea:#5CC3CE; --mist:#17233A; --sky:#2B5F73; --leaf:#6CC08E; --paper:#0F1726; --muted:#A9B6C6; --rule:#2A3A54; }
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.65 var(--sans); }
+a { color:var(--sea); text-underline-offset:2px; }
+a:focus-visible, summary:focus-visible { outline:2px solid var(--sea); outline-offset:3px; border-radius:4px; }
+img { max-width:100%; height:auto; }
+.wrap { max-width:1040px; margin:0 auto; padding:0 16px; }
+.narrow { max-width:46rem; }
+
+/* Head: the same headword and sky rule as the LMS front page. */
+header { padding:72px 0 48px; }
+.headword { font-size:clamp(52px,11vw,112px); font-weight:800; letter-spacing:-.045em; line-height:.95; margin:0; }
+.tagline { margin:20px 0 0; padding:10px 0 10px 16px; border-left:4px solid var(--sky); font-weight:600; font-size:18px; }
+.lead { font-size:19px; max-width:40rem; margin:28px 0 0; }
+.author { display:flex; align-items:center; gap:12px; margin-top:28px; }
+.author img { width:52px; height:52px; border-radius:50%; object-fit:cover; border:1px solid var(--rule); }
+.byline { color:var(--muted); font-size:14px; }
+.btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:28px; }
+.btn { padding:11px 18px; border-radius:8px; font-weight:600; font-size:15px; text-decoration:none; border:1.5px solid var(--sea); color:var(--sea); }
+.btn.primary { background:var(--sea); color:var(--paper); }
+.btn:hover { background:var(--mist); }
+.btn.primary:hover { background:var(--sea); filter:brightness(1.08); }
+.shot-hero { margin:48px 0 0; }
+
+section { padding:56px 0; border-top:1px solid var(--rule); }
+h2 { font-size:clamp(26px,4vw,34px); letter-spacing:-.02em; line-height:1.15; margin:0 0 8px; }
+h3 { font-size:19px; margin:0 0 6px; }
+.sub { color:var(--muted); margin:0 0 28px; max-width:44rem; }
+.note { color:var(--muted); font-size:14px; }
+
+/* Try it: a real sequence, so numbered nodes on one line, as in the LMS. */
+.steps { list-style:none; margin:0; padding:0 0 0 44px; position:relative; counter-reset:s; max-width:46rem; }
+.steps::before { content:""; position:absolute; left:15px; top:16px; bottom:16px; width:2px; background:var(--sky); }
+.steps li { position:relative; padding:4px 0 18px; counter-increment:s; }
+.steps li::before { content:counter(s); position:absolute; left:-44px; top:2px; width:32px; height:32px; border-radius:50%;
+  display:grid; place-items:center; background:var(--paper); border:2px solid var(--sky); font-weight:700; font-size:14px; }
+.steps b { font-weight:700; }
+code { font-family:var(--mono); font-size:.88em; background:var(--mist); padding:1px 5px; border-radius:4px; }
+
+/* Roles. */
+.roles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:32px; }
+.role { border-top:3px solid var(--ink); padding-top:16px; }
+.role .moodle { font-size:13px; color:var(--muted); margin:0 0 12px; }
+.role h4 { font-size:14px; margin:16px 0 4px; }
+.role ul { margin:0; padding-left:18px; font-size:15px; }
+.role li { margin:3px 0; }
+.role figure { margin:16px 0 0; }
+
+/* Tables. */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+th, td { padding:10px 14px 10px 0; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
+th { font-size:13px; font-weight:600; color:var(--muted); }
+td:first-child { font-weight:600; white-space:nowrap; }
+td .feature { display:block; font-weight:400; font-size:13px; color:var(--muted); white-space:normal; }
+
+figure { margin:0; }
+figure img { display:block; width:100%; border:1px solid var(--rule); border-radius:10px; }
+figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:28px 24px; }
+.stack-figs { display:grid; gap:28px; }
+
+/* Insights: what each part answers. */
+.answers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 32px; margin:0 0 32px; }
+.answers div { padding-left:16px; border-left:4px solid var(--sky); }
+.answers dt { font-weight:700; }
+.answers dd { margin:2px 0 0; color:var(--muted); font-size:15px; }
+.aside { margin:28px 0 0; padding:16px 18px; background:var(--mist); border-radius:10px; font-size:15px; max-width:46rem; }
+
+/* Badges. */
+.badges { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; }
+.badges img { width:120px; height:120px; display:block; margin-bottom:10px; }
+.badges b { display:block; font-size:15px; line-height:1.35; }
+.badges span { font-size:14px; color:var(--muted); }
+
+.ops { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 40px; }
+.ops p { margin:0; font-size:15px; color:var(--muted); }
+
+footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
+
+@media (max-width:860px) {
+  .roles, .two, .answers, .ops { grid-template-columns:1fr; }
+  .badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  header { padding-top:48px; }
+  .lead { font-size:17px; }
+  td:first-child { white-space:normal; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tagline { animation:rule-in .7s .15s ease-out both; }
+  @keyframes rule-in { from { opacity:0; transform:translateY(6px); border-left-color:transparent; } to { opacity:1; transform:none; } }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1 class="headword">Kita paham.</h1>
+    <p class="tagline">Kita Paham AI Academy, a Learning Management System for AI Literacy</p>
+    <p class="lead">A working Moodle 5.3 site that I set up, configured and run on my own server: three short modules on AI literacy, three roles with their own view, completion tracking, open badges, and a learning analytics page that shows lecturers where learners stop and which quiz questions trip them up.</p>
+    <div class="author">
+      <img src="../img/amrina.jpg" alt="Photo of Amrina" width="52" height="52">
+      <div><strong>Amrina</strong><div class="byline">M.Sc. Educational Technology, Saarland University · <a href="https://sayamrina.github.io/">Portfolio</a></div></div>
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="https://kpacademy.duckdns.org/">Open the live LMS</a>
+      <a class="btn" href="https://kpacademy.duckdns.org/login/index.php">Try a demo role</a>
+      <a class="btn" href="#try">How to try it</a>
+      <a class="btn" href="https://sayamrina.github.io/">My portfolio</a>
+    </div>
+    <figure class="shot-hero">
+      <img src="img/insights.jpg" alt="Learning insights for Module 1: completion rate, active learners, quizzes passed at the first try, typical time to finish and badges awarded" width="1366" height="860">
+      <figcaption>Learning insights for one module, as a lecturer sees them.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section id="try">
+  <div class="wrap">
+    <h2>How to try it</h2>
+    <p class="sub">About ten minutes. Demo accounts are shared and reset every night at 03:00, so nothing you do there can break the site.</p>
+    <ol class="steps">
+      <li><b>Open the login page</b> and answer “Who are you?” with <i>Student</i>, <i>Lecturer</i> or <i>Admin</i>. Each choice explains what that role does and logs you in with one click.</li>
+      <li><b>As a student,</b> continue with Module 1: read the first chapter, then take its quiz. Every answer gets feedback straight away; with 60 % the next chapter opens.</li>
+      <li><b>Look at your progress</b> on the home page: a bar per module, the next step, and the four badges you can earn, greyed out until you earn them.</li>
+      <li><b>Log in again as a lecturer</b> and open <i>Learning insights</i>: the learning path with its biggest drop, the questions marked for review, and the learners who may need a message.</li>
+      <li><b>Log in as an admin</b> to see the site at a glance and the places an operator needs most: users, courses, logs and permissions.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Three roles, three views</h2>
+    <p class="sub">Each role is a standard Moodle role, so the permissions are Moodle’s own. After login the home page changes to what that person needs first.</p>
+    <div class="roles">
+      <article class="role">
+        <h3>Student</h3>
+        <p class="moodle">Moodle role: student</p>
+        <h4>Sees</h4>
+        <ul><li>Progress per module and the next step to take</li><li>Chapters that open one after the other</li><li>Earned and open badges</li></ul>
+        <h4>Can</h4>
+        <ul><li>Read, take quizzes as often as needed, do the practice tasks</li><li>Enrol in a module by themselves</li><li>Download an earned badge as an Open Badge</li></ul>
+      </article>
+      <article class="role">
+        <h3>Lecturer</h3>
+        <p class="moodle">Moodle role: editing teacher in every module</p>
+        <h4>Sees</h4>
+        <ul><li>Per module: learners, finished attempts, average grade, unanswered questions</li><li>Learning insights for each module</li></ul>
+        <h4>Can</h4>
+        <ul><li>Answer questions in the module forum</li><li>Check grades and learner progress</li><li>Edit chapters, quizzes and settings</li></ul>
+      </article>
+      <article class="role">
+        <h3>Admin</h3>
+        <p class="moodle">Moodle role: manager for the whole site</p>
+        <h4>Sees</h4>
+        <ul><li>User accounts, active users, modules and completions</li><li>Learning insights for every module</li></ul>
+        <h4>Can</h4>
+        <ul><li>Manage users, enrolments, courses and categories</li><li>Read the logs and check permissions</li><li>Issue and review badges</li></ul>
+      </article>
+    </div>
+    <p class="note" style="margin-top:24px">The three public demo accounts carry an extra restriction role: they cannot change their password or profile, post in forums, send messages, assign roles or delete courses, so a shared account cannot be taken over or misused.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Tools in the LMS</h2>
+    <p class="sub">What a learner, lecturer or admin works with, and the Moodle feature behind it.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tool</th><th>What it does here</th></tr></thead>
+      <tbody>
+        <tr><td>Chapters<span class="feature">Topics format, Page</span></td><td>Each module has three chapters with the same rhythm: <i>Read</i> (a short text with sources), <i>Check</i> (a quiz) and <i>Try</i> (a task with any AI tool). The front page shows how many minutes each module takes.</td></tr>
+        <tr><td>Quizzes<span class="feature">Quiz, Question bank</span></td><td>45 multiple-choice questions, five per chapter, with feedback on every answer and immediate feedback behaviour. Pass mark 60 %, unlimited attempts, the best attempt counts.</td></tr>
+        <tr><td>Learner pathway<span class="feature">Restrict access</span></td><td>A chapter opens only after the quiz of the chapter before is passed, so learners always know what comes next.</td></tr>
+        <tr><td>Completion tracking<span class="feature">Activity and course completion</span></td><td>Pages complete on view, quizzes on a passing grade; a module is complete when every chapter is. Progress bars and reports use the same data.</td></tr>
+        <tr><td>Open badges<span class="feature">Badges, Open Badges 2.0</span></td><td>One badge per module, awarded automatically on completion, and the <i>AI Literacy Pathway</i> badge for all three modules. Badge images were designed for this site.</td></tr>
+        <tr><td>Questions and corrections<span class="feature">Forum</span></td><td>One forum per module where learners ask questions or report an error; the lecturer’s home page counts unanswered posts.</td></tr>
+        <tr><td>Learning insights<span class="feature">Own plugin, local_kpainsights</span></td><td>Learning path with drop-off, first-try results per question with the most chosen wrong answer, daily activity and quiet learners. More below.</td></tr>
+        <tr><td>Reports<span class="feature">Gradebook, reports, logs</span></td><td>Grader report, activity completion, course completion, quiz statistics and the site logs, linked from the role views.</td></tr>
+        <tr><td>Enrolment<span class="feature">Self and manual enrolment</span></td><td>Learners enrol themselves; lecturers and admins can enrol others by hand.</td></tr>
+        <tr><td>Language and display<span class="feature">Language packs, colour mode</span></td><td>Interface in English or German, light or dark mode; works on a phone.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Learning insights</h2>
+    <p class="sub">A small Moodle plugin I wrote for lecturers and admins. Moodle already stores every page view, attempt and completion; the plugin turns them into four answers for one module at a time.</p>
+    <dl class="answers">
+      <div><dt>Where do learners stop?</dt><dd>Share of enrolled learners at every step, chapter by chapter, with the biggest drop called out.</dd></div>
+      <div><dt>Which questions need another look?</dt><dd>First-try results per question and the wrong answer chosen most often. Below 50 % a question is marked for review: the question, its answers or the text may be unclear.</dd></div>
+      <div><dt>Who may need a message?</dt><dd>Learners who have not finished and have been quiet for a week, with where they stopped, such as “did not pass the quiz of chapter 2”.</dd></div>
+      <div><dt>How active is the module?</dt><dd>Learners active per day over six weeks, with a tooltip on every day and the same numbers as a table.</dd></div>
+    </dl>
+    <div class="stack-figs">
+      <div class="two">
+        <figure><img src="img/path.jpg" alt="The learning path with a bar per step and a list of quiet learners" width="1366" height="860" loading="lazy"><figcaption>Where learners stop, and who may need a message.</figcaption></figure>
+        <figure><img src="img/items.jpg" alt="Quiz questions with the share answered correctly at the first try and the most chosen wrong answer" width="1366" height="860" loading="lazy"><figcaption>Quiz questions to look at, with the tempting wrong answer.</figcaption></figure>
+      </div>
+    </div>
+    <p class="aside"><b>About the data.</b> A public demo has almost no real learners, so the site includes a sample cohort of 60 simulated learners, labelled as such on the page. Their activity is produced with Moodle’s own functions (page views, quiz attempts with answers, completion), dated across six weeks and moved forward every night, so the Moodle reports and the badges show the same numbers as the insights.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Badges</h2>
+    <p class="sub">Round seals in the colours of the site. The number stays readable even at the 35-pixel size Moodle uses in lists.</p>
+    <ul class="badges">
+      <li><img src="img/badge_module1.png" alt="" width="120" height="120"><b>Module 1: AI Literacy Essentials</b><span>Completing all three chapters</span></li>
+      <li><img src="img/badge_module2.png" alt="" width="120" height="120"><b>Module 2: AI in Teaching and Learning</b><span>Completing all three chapters</span></li>
+      <li><img src="img/badge_module3.png" alt="" width="120" height="120"><b>Module 3: AI, Work and Society</b><span>Completing all three chapters</span></li>
+      <li><img src="img/badge_pathway.png" alt="" width="120" height="120"><b>AI Literacy Pathway</b><span>Completing all three modules</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How the site is run</h2>
+    <p class="sub">The parts an operator deals with every day, set up so that changes are repeatable and tested.</p>
+    <div class="ops">
+      <div><h3>Content as files</h3><p>Chapters, quizzes and module settings live in HTML and JSON files. One script rebuilds a module in Moodle from them, with sections, access rules, completion criteria and enrolment, so a correction never depends on clicking through forms.</p></div>
+      <div><h3>Nightly reset</h3><p>Every night the database and files return to a saved snapshot, the sample cohort is moved forward to today and the caches are purged. The demo stays clean for the next visitor.</p></div>
+      <div><h3>Quality checks</h3><p>Browser tests log in with every role and check the dashboards, the quiz flow (passing opens the next chapter), the insights page, phone width, dark mode and horizontal overflow, with screenshots to review.</p></div>
+      <div><h3>Accessibility and languages</h3><p>Keyboard focus is visible, charts have a table view, status is never shown by colour alone, and the interface switches between English and German.</p></div>
+      <div><h3>Hosting and security</h3><p>Moodle, PostgreSQL and the web server run in Docker with automatic HTTPS, read-only containers, a database without internet access and a firewall that only opens the web ports.</p></div>
+      <div><h3>Own theme</h3><p>A child theme of Moodle’s Boost with its own front page, login with the role choice, role views and a portfolio banner on every page.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Skills it shows</h2>
+    <p class="sub">Mapped to the daily work of running digital learning on Moodle.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Skill</th><th>In the project</th></tr></thead>
+      <tbody>
+        <tr><td>Moodle course building</td><td>Three modules from one template: sections, pages, quizzes, forum, access rules, completion and enrolment, built and rebuilt by script</td></tr>
+        <tr><td>Assessment</td><td>45 questions imported into the question bank with feedback per answer; pass mark, attempts and grading method set per quiz</td></tr>
+        <tr><td>Learner pathways and completion</td><td>Chapters unlocked by passing grades; activity and course completion feeding progress bars, reports and badges</td></tr>
+        <tr><td>Badges and certificates</td><td>Course and site badges with completion criteria, issuer details and designed badge images</td></tr>
+        <tr><td>First-line administration</td><td>Roles and permissions, a restriction role for shared accounts, enrolment methods, language packs, logs</td></tr>
+        <tr><td>Quality assurance</td><td>Pre-release checks for every role, phone width, dark mode, accessibility; question review based on learner answers</td></tr>
+        <tr><td>Instructional design</td><td>Read, check, try in every chapter; feedback on every answer; plain language; sources in every chapter</td></tr>
+        <tr><td>Learning analytics</td><td>Own Moodle plugin in PHP and Mustache: drop-off, item analysis, activity and quiet learners</td></tr>
+        <tr><td>Technical operations</td><td>Docker, PostgreSQL, Caddy, nightly snapshot and restore, Moodle CLI for upgrades and cache purges</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>More screens</h2>
+    <div class="two">
+      <figure><img src="img/home.jpg" alt="Home page with the three modules and their chapters" width="1366" height="860" loading="lazy"><figcaption>Home: the three modules in the order they are meant to be taken.</figcaption></figure>
+      <figure><img src="img/login.jpg" alt="Login page asking Who are you? with Student, Lecturer and Admin" width="1366" height="860" loading="lazy"><figcaption>Login: choose a role and see what it does.</figcaption></figure>
+      <figure><img src="img/student.jpg" alt="Student home page with progress per module and four badges" width="1366" height="860" loading="lazy"><figcaption>Student: progress, next step and badges.</figcaption></figure>
+      <figure><img src="img/chapter.jpg" alt="A chapter text with completion requirement and sources" width="1366" height="860" loading="lazy"><figcaption>A chapter: plain text, completion shown at the top.</figcaption></figure>
+      <figure><img src="img/lecturer.jpg" alt="Lecturer home page with figures and links per module" width="1366" height="860" loading="lazy"><figcaption>Lecturer: each module with its figures and tasks.</figcaption></figure>
+      <figure><img src="img/admin.jpg" alt="Admin home page with site figures and links" width="1366" height="860" loading="lazy"><figcaption>Admin: the site at a glance.</figcaption></figure>
+      <figure><img src="img/mobile.jpg" alt="Learning insights on a phone" width="390" height="844" loading="lazy" style="max-width:260px"><figcaption>Learning insights on a phone.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Project 2026 · This project was built by Amrina, with AI as a supporting tool for coding. The module texts are trial versions. Runs on Moodle, open-source software under the GNU GPL. Font: Plus Jakarta Sans (SIL Open Font License). · <a href="https://sayamrina.github.io/">Portfolio</a></div></footer>
+</body>
+</html>
