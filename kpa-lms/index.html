@@ -44,11 +44,10 @@ h3 { font-size:19px; margin:0 0 6px; }
 .sub { color:var(--muted); margin:0 0 28px; max-width:44rem; }
 .note { color:var(--muted); font-size:14px; }
 
-/* Try it: a real sequence, so numbered nodes on one line, as in the LMS. */
-.steps { list-style:none; margin:0; padding:0 0 0 44px; position:relative; counter-reset:s; max-width:46rem; }
-.steps::before { content:""; position:absolute; left:15px; top:16px; bottom:16px; width:2px; background:var(--sky); }
-.steps li { position:relative; padding:4px 0 18px; counter-increment:s; }
-.steps li::before { content:counter(s); position:absolute; left:-44px; top:2px; width:32px; height:32px; border-radius:50%;
+/* Try it: a real sequence, so numbered nodes, read in two columns. */
+.steps { list-style:none; margin:0; padding:0; counter-reset:s; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 40px; }
+.steps li { position:relative; padding:14px 0 16px 44px; border-top:2px solid var(--sky); counter-increment:s; }
+.steps li::before { content:counter(s); position:absolute; left:0; top:12px; width:32px; height:32px; border-radius:50%;
   display:grid; place-items:center; background:var(--paper); border:2px solid var(--sky); font-weight:700; font-size:14px; }
 .steps b { font-weight:700; }
 code { font-family:var(--mono); font-size:.88em; background:var(--mist); padding:1px 5px; border-radius:4px; }
@@ -111,7 +110,7 @@ figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
 footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
 
 @media (max-width:860px) {
-  .roles, .two, .answers, .ops, .cert { grid-template-columns:1fr; }
+  .roles, .two, .answers, .ops, .cert, .steps { grid-template-columns:1fr; }
   .strip li, .strip img { width:200px; } .strip img { height:125px; }
   .badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
   header { padding-top:48px; }
