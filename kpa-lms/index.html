@@ -89,13 +89,30 @@ figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
 .badges b { display:block; font-size:15px; line-height:1.35; }
 .badges span { font-size:14px; color:var(--muted); }
 
+.strip-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; }
+.strip-nav { display:flex; gap:8px; }
+.strip-nav button { width:40px; height:40px; border-radius:50%; border:1.5px solid var(--sea); background:var(--paper); color:var(--sea);
+  font:700 22px/1 var(--sans); cursor:pointer; }
+.strip-nav button:hover { background:var(--mist); }
+.strip-nav button:focus-visible { outline:2px solid var(--sea); outline-offset:2px; }
+.strip { list-style:none; margin:0; padding:4px 2px 14px; display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory;
+  scroll-behavior:smooth; overscroll-behavior-x:contain; }
+.strip:focus-visible { outline:2px solid var(--sea); outline-offset:2px; border-radius:8px; }
+.strip li { flex:0 0 auto; width:240px; scroll-snap-align:start; }
+.strip img { display:block; width:240px; height:150px; object-fit:cover; object-position:top; border:1px solid var(--rule); border-radius:8px; }
+.strip span { display:block; margin-top:6px; font-size:13px; color:var(--muted); }
+@media (prefers-reduced-motion: reduce) { .strip { scroll-behavior:auto; } }
+.cert { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:32px; align-items:start; }
+.cert ul { margin:0; padding-left:18px; font-size:15px; }
+.cert li { margin:4px 0; }
 .ops { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 40px; }
 .ops p { margin:0; font-size:15px; color:var(--muted); }
 
 footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
 
 @media (max-width:860px) {
-  .roles, .two, .answers, .ops { grid-template-columns:1fr; }
+  .roles, .two, .answers, .ops, .cert { grid-template-columns:1fr; }
+  .strip li, .strip img { width:200px; } .strip img { height:125px; }
   .badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
   header { padding-top:48px; }
   .lead { font-size:17px; }
@@ -112,7 +129,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
   <div class="wrap">
     <h1 class="headword">Kita paham.</h1>
     <p class="tagline">Kita Paham AI Academy, a Learning Management System for AI Literacy</p>
-    <p class="lead">A working Moodle 5.3 site that I set up, configured and run on my own server: three short modules on AI literacy, three roles with their own view, completion tracking, open badges, and a learning analytics page that shows lecturers where learners stop and which quiz questions trip them up.</p>
+    <p class="lead">A working Moodle 5.3 site that I set up, configured and run on my own server: three short modules on AI literacy, three roles with their own view, completion tracking, open badges, PDF certificates, and a learning analytics page that shows lecturers where learners stop and which quiz questions trip them up.</p>
     <div class="author">
       <img src="../img/amrina.jpg" alt="Photo of Amrina" width="52" height="52">
       <div><strong>Amrina</strong><div class="byline">M.Sc. Educational Technology, Saarland University · <a href="https://sayamrina.github.io/">Portfolio</a></div></div>
@@ -137,7 +154,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
     <ol class="steps">
       <li><b>Open the login page</b> and answer “Who are you?” with <i>Student</i>, <i>Lecturer</i> or <i>Admin</i>. Each choice explains what that role does and logs you in with one click.</li>
       <li><b>As a student,</b> continue with Module 1: read the first chapter, then take its quiz. Every answer gets feedback straight away; with 60 % the next chapter opens.</li>
-      <li><b>Look at your progress</b> on the home page: a bar per module, the next step, and the four badges you can earn, greyed out until you earn them.</li>
+      <li><b>Look at your progress</b> on the home page: a bar per module, the next step, and the four badges you can earn, greyed out until you earn them. A finished module adds a button for its PDF certificate.</li>
       <li><b>Log in again as a lecturer</b> and open <i>Learning insights</i>: the learning path with its biggest drop, the questions marked for review, and the learners who may need a message.</li>
       <li><b>Log in as an admin</b> to see the site at a glance and the places an operator needs most: users, courses, logs and permissions.</li>
     </ol>
@@ -155,7 +172,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
         <h4>Sees</h4>
         <ul><li>Progress per module and the next step to take</li><li>Chapters that open one after the other</li><li>Earned and open badges</li></ul>
         <h4>Can</h4>
-        <ul><li>Read, take quizzes as often as needed, do the practice tasks</li><li>Enrol in a module by themselves</li><li>Download an earned badge as an Open Badge</li></ul>
+        <ul><li>Read, take quizzes as often as needed, do the practice tasks</li><li>Enrol in a module by themselves</li><li>Download earned badges and certificates</li></ul>
       </article>
       <article class="role">
         <h3>Lecturer</h3>
@@ -163,7 +180,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
         <h4>Sees</h4>
         <ul><li>Per module: learners, finished attempts, average grade, unanswered questions</li><li>Learning insights for each module</li></ul>
         <h4>Can</h4>
-        <ul><li>Answer questions in the module forum</li><li>Check grades and learner progress</li><li>Edit chapters, quizzes and settings</li></ul>
+        <ul><li>Answer questions in the module forum</li><li>Check grades, learner progress and issued certificates</li><li>Edit chapters, quizzes and settings</li></ul>
       </article>
       <article class="role">
         <h3>Admin</h3>
@@ -171,7 +188,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
         <h4>Sees</h4>
         <ul><li>User accounts, active users, modules and completions</li><li>Learning insights for every module</li></ul>
         <h4>Can</h4>
-        <ul><li>Manage users, enrolments, courses and categories</li><li>Read the logs and check permissions</li><li>Issue and review badges</li></ul>
+        <ul><li>Manage users, enrolments, courses and categories</li><li>Read the logs and check permissions</li><li>Issue and review badges and certificates</li></ul>
       </article>
     </div>
     <p class="note" style="margin-top:24px">The three public demo accounts carry an extra restriction role: they cannot change their password or profile, post in forums, send messages, assign roles or delete courses, so a shared account cannot be taken over or misused.</p>
@@ -190,6 +207,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
         <tr><td>Learner pathway<span class="feature">Restrict access</span></td><td>A chapter opens only after the quiz of the chapter before is passed, so learners always know what comes next.</td></tr>
         <tr><td>Completion tracking<span class="feature">Activity and course completion</span></td><td>Pages complete on view, quizzes on a passing grade; a module is complete when every chapter is. Progress bars and reports use the same data.</td></tr>
         <tr><td>Open badges<span class="feature">Badges, Open Badges 2.0</span></td><td>One badge per module, awarded automatically on completion, and the <i>AI Literacy Pathway</i> badge for all three modules. Badge images were designed for this site.</td></tr>
+        <tr><td>Certificates<span class="feature">Custom certificate (mod_customcert)</span></td><td>A PDF certificate per module with name, completion date, code and QR code, released on completion and verifiable by anyone.</td></tr>
         <tr><td>Questions and corrections<span class="feature">Forum</span></td><td>One forum per module where learners ask questions or report an error; the lecturer’s home page counts unanswered posts.</td></tr>
         <tr><td>Learning insights<span class="feature">Own plugin, local_kpainsights</span></td><td>Learning path with drop-off, first-try results per question with the most chosen wrong answer, daily activity and quiet learners. More below.</td></tr>
         <tr><td>Reports<span class="feature">Gradebook, reports, logs</span></td><td>Grader report, activity completion, course completion, quiz statistics and the site logs, linked from the role views.</td></tr>
@@ -235,6 +253,25 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
 
 <section>
   <div class="wrap">
+    <h2>Certificates</h2>
+    <p class="sub">Each module ends with a PDF certificate, built with the Custom certificate plugin for Moodle.</p>
+    <div class="cert">
+      <figure><a href="img/certificate.jpg" target="_blank" rel="noopener"><img src="img/certificate.jpg" alt="Certificate of completion for Module 1, AI Literacy Essentials, with the learner's name, completion date, certificate code and QR code" width="1287" height="910" loading="lazy"></a>
+        <figcaption>The certificate of a sample learner.</figcaption></figure>
+      <ul>
+        <li>Opens only when every chapter of the module is complete, and the learner’s home page then offers <i>Get your certificate</i></li>
+        <li>Shows the learner’s name, the module with its chapters and the date of completion from Moodle’s completion data</li>
+        <li>Every certificate has its own code and a QR code; anyone can check it on the site’s public verification page</li>
+        <li>A4 landscape template in the site’s font and colours; the module seal matches the badge</li>
+        <li>States that the modules are trial versions and that it is not an accredited qualification</li>
+        <li>Lecturers see who has been issued a certificate in the module’s certificate report</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <h2>How the site is run</h2>
     <p class="sub">The parts an operator deals with every day, set up so that changes are repeatable and tested.</p>
     <div class="ops">
@@ -258,7 +295,7 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
         <tr><td>Moodle course building</td><td>Three modules from one template: sections, pages, quizzes, forum, access rules, completion and enrolment, built and rebuilt by script</td></tr>
         <tr><td>Assessment</td><td>45 questions imported into the question bank with feedback per answer; pass mark, attempts and grading method set per quiz</td></tr>
         <tr><td>Learner pathways and completion</td><td>Chapters unlocked by passing grades; activity and course completion feeding progress bars, reports and badges</td></tr>
-        <tr><td>Badges and certificates</td><td>Course and site badges with completion criteria, issuer details and designed badge images</td></tr>
+        <tr><td>Badges and certificates</td><td>Course and site badges with completion criteria; PDF certificates with a designed template, release on completion, codes and public verification</td></tr>
         <tr><td>First-line administration</td><td>Roles and permissions, a restriction role for shared accounts, enrolment methods, language packs, logs</td></tr>
         <tr><td>Quality assurance</td><td>Pre-release checks for every role, phone width, dark mode, accessibility; question review based on learner answers</td></tr>
         <tr><td>Instructional design</td><td>Read, check, try in every chapter; feedback on every answer; plain language; sources in every chapter</td></tr>
@@ -271,19 +308,33 @@ footer { padding:32px 0 64px; border-top:1px solid var(--rule); color:var(--mute
 
 <section>
   <div class="wrap">
-    <h2>More screens</h2>
-    <div class="two">
-      <figure><img src="img/home.jpg" alt="Home page with the three modules and their chapters" width="1366" height="860" loading="lazy"><figcaption>Home: the three modules in the order they are meant to be taken.</figcaption></figure>
-      <figure><img src="img/login.jpg" alt="Login page asking Who are you? with Student, Lecturer and Admin" width="1366" height="860" loading="lazy"><figcaption>Login: choose a role and see what it does.</figcaption></figure>
-      <figure><img src="img/student.jpg" alt="Student home page with progress per module and four badges" width="1366" height="860" loading="lazy"><figcaption>Student: progress, next step and badges.</figcaption></figure>
-      <figure><img src="img/chapter.jpg" alt="A chapter text with completion requirement and sources" width="1366" height="860" loading="lazy"><figcaption>A chapter: plain text, completion shown at the top.</figcaption></figure>
-      <figure><img src="img/lecturer.jpg" alt="Lecturer home page with figures and links per module" width="1366" height="860" loading="lazy"><figcaption>Lecturer: each module with its figures and tasks.</figcaption></figure>
-      <figure><img src="img/admin.jpg" alt="Admin home page with site figures and links" width="1366" height="860" loading="lazy"><figcaption>Admin: the site at a glance.</figcaption></figure>
-      <figure><img src="img/mobile.jpg" alt="Learning insights on a phone" width="390" height="844" loading="lazy" style="max-width:260px"><figcaption>Learning insights on a phone.</figcaption></figure>
+    <div class="strip-head">
+      <h2>More screens</h2>
+      <div class="strip-nav"><button type="button" data-dir="-1" aria-label="Previous screens">‹</button><button type="button" data-dir="1" aria-label="Next screens">›</button></div>
     </div>
+    <p class="sub">Swipe or scroll sideways; click a screen to open it full size.</p>
+    <ul class="strip" tabindex="0" aria-label="Screenshots">
+        <li><a href="img/home.jpg" target="_blank" rel="noopener"><img src="img/home.jpg" alt="Home page with the three modules and their chapters" loading="lazy"></a><span>Home: the modules in order</span></li>
+        <li><a href="img/login.jpg" target="_blank" rel="noopener"><img src="img/login.jpg" alt="Login page asking Who are you? with Student, Lecturer and Admin" loading="lazy"></a><span>Login: choose a role</span></li>
+        <li><a href="img/student.jpg" target="_blank" rel="noopener"><img src="img/student.jpg" alt="Student home page with progress per module and four badges" loading="lazy"></a><span>Student: progress and badges</span></li>
+        <li><a href="img/chapter.jpg" target="_blank" rel="noopener"><img src="img/chapter.jpg" alt="A chapter text with completion requirement and sources" loading="lazy"></a><span>A chapter to read</span></li>
+        <li><a href="img/lecturer.jpg" target="_blank" rel="noopener"><img src="img/lecturer.jpg" alt="Lecturer home page with figures and links per module" loading="lazy"></a><span>Lecturer: figures per module</span></li>
+        <li><a href="img/admin.jpg" target="_blank" rel="noopener"><img src="img/admin.jpg" alt="Admin home page with site figures and links" loading="lazy"></a><span>Admin: the site at a glance</span></li>
+        <li><a href="img/items.jpg" target="_blank" rel="noopener"><img src="img/items.jpg" alt="Quiz questions with first-try results and the most chosen wrong answer" loading="lazy"></a><span>Questions to review</span></li>
+        <li><a href="img/mobile.jpg" target="_blank" rel="noopener"><img src="img/mobile.jpg" alt="Learning insights on a phone" loading="lazy"></a><span>Insights on a phone</span></li>
+    </ul>
   </div>
 </section>
 
 <footer><div class="wrap">Project 2026 · This project was built by Amrina, with AI as a supporting tool for coding. The module texts are trial versions. Runs on Moodle, open-source software under the GNU GPL. Font: Plus Jakarta Sans (SIL Open Font License). · <a href="https://sayamrina.github.io/">Portfolio</a></div></footer>
+<script>
+// Arrow buttons move the strip by about one screen width of thumbnails.
+document.querySelectorAll('.strip-nav button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var strip = document.querySelector('.strip');
+    strip.scrollBy({ left: Number(b.dataset.dir) * strip.clientWidth * 0.8 });
+  });
+});
+</script>
 </body>
 </html>
