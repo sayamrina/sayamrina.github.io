@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCORM Completion Repair</title>
+<meta name="description" content="Personal project: a SCORM course reported passed but Moodle never completed it. Reconstruction, learner recovery, permanent fix, twelve acceptance tests and a full course audit on a self-hosted Moodle 5.3.">
+<style>
+@font-face { font-family:"Plus Jakarta Sans"; font-weight:200 800; font-display:swap; src:url(../fonts/plus-jakarta-sans-latin-wght-normal.woff2) format("woff2"); }
+:root { color-scheme:light;
+  --ink:#142033; --sea:#0B6E79; --mist:#EAF2F6; --sky:#C6E6F2; --leaf:#2F7D4F; --rust:#A23B2A; --paper:#fff; --muted:#4A5568; --rule:#D5E1EA; --code:#0F1A2B; --codeink:#D8E4EE;
+  --sans:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono:ui-monospace, Menlo, Consolas, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme:dark;
+  --ink:#E6EDF5; --sea:#5CC3CE; --mist:#17233A; --sky:#2B5F73; --leaf:#6CC08E; --rust:#F08A74; --paper:#0F1726; --muted:#A9B6C6; --rule:#2A3A54; --code:#09111D; } }
+:root[data-theme="dark"] { color-scheme:dark;
+  --ink:#E6EDF5; --sea:#5CC3CE; --mist:#17233A; --sky:#2B5F73; --leaf:#6CC08E; --rust:#F08A74; --paper:#0F1726; --muted:#A9B6C6; --rule:#2A3A54; --code:#09111D; }
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.65 var(--sans); }
+a { color:var(--sea); text-underline-offset:2px; }
+a:focus-visible, summary:focus-visible { outline:2px solid var(--sea); outline-offset:3px; border-radius:4px; }
+img { max-width:100%; height:auto; display:block; }
+.wrap { max-width:1040px; margin:0 auto; padding:0 16px; }
+.prose { max-width:44rem; }
+header { padding:64px 0 40px; }
+.crumb { font-size:14px; color:var(--muted); margin:0 0 28px; }
+h1 { font-size:clamp(44px,9vw,96px); font-weight:800; letter-spacing:-.045em; line-height:.95; margin:0; }
+.lead { font-size:19px; max-width:42rem; margin:28px 0 0; }
+.facts { display:flex; flex-wrap:wrap; gap:8px 28px; margin:24px 0 0; padding:0; list-style:none; font-size:15px; color:var(--muted); }
+.facts b { color:var(--ink); }
+section { padding:52px 0; border-top:1px solid var(--rule); }
+h2 { font-size:clamp(26px,4vw,34px); letter-spacing:-.02em; line-height:1.15; margin:0 0 10px; }
+h3 { font-size:19px; margin:28px 0 6px; }
+.sub { color:var(--muted); margin:0 0 24px; max-width:44rem; }
+.note { color:var(--muted); font-size:14px; }
+code { font-family:var(--mono); font-size:.88em; background:var(--mist); padding:1px 5px; border-radius:4px; }
+
+/* The trace: what the package said on the left, what Moodle asked for on the right. */
+.trace { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); margin-top:36px; border-radius:12px; overflow:hidden; }
+.trace pre { margin:0; padding:22px 22px 24px; background:var(--code); color:var(--codeink); font:13.5px/1.75 var(--mono); overflow-x:auto; }
+.trace pre .c { color:#8DA2B8; }
+.trace pre .hit { color:#F5C26B; }
+.trace .gate { background:var(--mist); padding:22px; }
+.gate h3 { margin:0 0 12px; font-size:16px; }
+.gate ul { list-style:none; margin:0; padding:0; }
+.gate li { padding:9px 0 9px 30px; position:relative; border-top:1px solid var(--rule); font-size:15px; }
+.gate li::before { position:absolute; left:2px; top:8px; font-weight:800; }
+.gate li.y::before { content:"✓"; color:var(--leaf); }
+.gate li.n::before { content:"✗"; color:var(--rust); }
+.gate .result { margin:14px 0 0; font-weight:700; color:var(--rust); }
+
+.cols { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:36px; }
+figure { margin:24px 0 0; }
+figure img { border:1px solid var(--rule); border-radius:8px; }
+figcaption { font-size:14px; color:var(--muted); margin-top:8px; }
+.phone img { max-width:300px; }
+
+table { width:100%; border-collapse:collapse; font-size:15px; }
+th, td { text-align:left; vertical-align:top; padding:9px 10px; border-bottom:1px solid var(--rule); }
+thead th { font-size:14px; color:var(--muted); font-weight:600; }
+tr.changed td:last-child { font-weight:700; color:var(--sea); }
+.scroll { overflow-x:auto; }
+.register { min-width:960px; font-size:14px; }
+
+.steps { list-style:none; margin:0; padding:0; counter-reset:s; }
+.steps li { position:relative; padding:12px 0 14px 46px; border-top:2px solid var(--sky); counter-increment:s; }
+.steps li::before { content:counter(s); position:absolute; left:0; top:10px; width:32px; height:32px; border-radius:50%; display:grid; place-items:center;
+  border:2px solid var(--sky); font-weight:700; font-size:14px; }
+
+.test { border-top:1px solid var(--rule); }
+.test summary { display:grid; grid-template-columns:2.2rem 1fr auto; gap:12px; align-items:baseline; padding:12px 0; cursor:pointer; list-style:none; }
+.test summary::-webkit-details-marker { display:none; }
+.test .num { font-weight:800; color:var(--muted); }
+.test .tname { font-weight:600; }
+.test summary::after { content:"+"; grid-column:3; grid-row:1; justify-self:end; margin-left:96px; color:var(--muted); }
+.test[open] summary::after { content:"−"; }
+.verdict { font-size:14px; font-weight:700; grid-column:3; grid-row:1; }
+.verdict.ok { color:var(--leaf); }
+.verdict.bad { color:var(--rust); }
+.test dl { display:grid; grid-template-columns:10rem 1fr; gap:6px 18px; margin:0 0 18px 2.2rem; font-size:15px; }
+.test dt { color:var(--muted); }
+.test dd { margin:0; }
+.files { margin:0; padding-left:18px; font-family:var(--mono); font-size:13px; }
+
+.finding { border-left:4px solid var(--sky); padding:2px 0 2px 16px; margin:22px 0; max-width:46rem; }
+.finding h3 { margin:0 0 4px; }
+.finding p { margin:0; }
+.statement { background:var(--mist); border-radius:10px; padding:20px 22px; max-width:46rem; }
+.statement p:first-child { margin-top:0; }
+.statement p:last-child { margin-bottom:0; }
+footer { padding:40px 0 64px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
+@media (max-width:760px) {
+  .trace, .cols { grid-template-columns:1fr; }
+  .test dl { grid-template-columns:1fr; margin-left:0; }
+  .test dt { margin-top:8px; }
+  .test summary::after { margin-left:0; display:none; }
+}
+</style>
+</head>
+<body>
+<header class="wrap">
+<p class="crumb"><a href="../">Kita Paham AI Academy</a> / SCORM case study · personal project</p>
+<h1>Passed.<br>Not complete.</h1>
+<p class="lead">A SCORM course told Moodle that learners had <b>passed</b>. Moodle showed a grade of 0 and kept the course <b>not complete</b>, so nobody got a certificate. I rebuilt the case on my own Moodle 5.3 site with synthetic learners, recovered the affected learners from the records they already had, fixed it for good and tested the result as a learner would.</p>
+<ul class="facts"><li><b>Moodle</b> 5.3+, SCORM 1.2</li><li><b>12 of 12</b> acceptance tests passed</li><li><b>3</b> learners recovered without redoing the course</li><li><b>20</b> assessed activities audited</li></ul>
+<div class="trace" role="figure" aria-label="What the package sent compared with what Moodle required">
+<pre><span class="c">// attempt 3, as saved by package 1.0.0</span>
+LMSInitialize("")
+SetValue("cmi.core.lesson_status", "incomplete")
+SetValue("cmi.interactions.0.id", "l1_q1")
+SetValue("cmi.interactions.0.result", "correct")
+<span class="c">// … 20 answers, all correct</span>
+SetValue("cmi.core.lesson_location", "l4")
+SetValue("cmi.suspend_data", "{done:[l1,l2,l3,l4]…}")
+<span class="hit">SetValue("cmi.core.lesson_status", "passed")</span>
+<span class="c">// cmi.core.score.raw: never set</span>
+LMSCommit("")  LMSFinish("")</pre>
+<div class="gate"><h3>Moodle's completion rule</h3><ul>
+<li class="y">Status completed or passed</li><li class="y">Receive a grade (0 from an empty score)</li><li class="n">Minimum score 80</li></ul>
+<p class="result">Not completed. Gradebook 0.00.</p></div>
+</div>
+</header>
+
+<section><div class="wrap">
+<h2>Root cause</h2>
+<div class="prose">
+<p>The package tracked <b>course completion</b>: it sent the answers as interactions and the status <code>passed</code> when every lesson was finished, but it never sent a score. The activity, on the other hand, required a <b>minimum score of 80</b>. A score that never arrives can never be 80, so the activity could not complete, and the CPD Certificate, which depended on it, stayed closed.</p>
+<p>Two settings made it harder to see: <b>Display attempt status</b> was off, so learners saw nothing on the entry page, and the <b>maximum grade was 80</b>, which looks like a pass mark but is only the top of the scale. The grade to pass was not set at all.</p>
+<p class="note">Evidence: the deployed package (sha256 <code>bf3093172e96…</code>) has no mastery score and no <code>score.raw</code> call; all saved values of every attempt, with timestamps in Europe/London, are in the evidence export.</p>
+</div>
+<div class="cols"><figure class=""><img src="img/t1_entry.png" alt="Entry page after a full pass with package 1.0.0" loading="lazy" width="1280" height="900"><figcaption>Test 1: after a perfect run, "Receive a score of 80 or more" is still to do.</figcaption></figure>
+<figure class=""><img src="img/t12_resume_after_update.png" alt="Package 2.0.0 resuming an attempt saved by 1.0.0" loading="lazy" width="1280" height="900"><figcaption>Package 2.0.0 resumes an attempt that 1.0.0 saved: lesson 1 ticked, lesson 2 open.</figcaption></figure></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>The learners first</h2>
+<p class="sub">Before changing anything, I exported the evidence, then recovered the learners from the records that already existed. Nobody had to repeat the course.</p>
+<ol class="steps prose">
+<li><b>Preserve.</b> Exported the package and its checksum, the settings, every attempt value with its timestamp, the interactions, grades and grade history, completion, certificate issues and course logs, before and after every change.</li>
+<li><b>Verify.</b> For each learner, a script checks the latest passed attempt: every lesson finished in the bookmark, a response to all 20 questions, and every lesson check at the package's own rule of 4 out of 5. The 20 correct answers are evidence of what was answered, not an official score of 100 %.</li>
+<li><b>Correct.</b> Completion was set through Moodle's own completion override, which records who made it. The attempts and the gradebook stay as they were; no score was written. Each correction has a course note with the fault, the evidence, the operator and the date, and an audit file.</li>
+<li><b>Certificate.</b> The scheduled task issued the CPD Certificate within a minute. The e-mail flag is set, but the demo server has no outgoing mail, so no e-mail was delivered. These are recorded as two separate results.</li>
+</ol>
+<h3>Every learner reviewed</h3>
+<div class="scroll"><table><thead><tr><th>Learner (synthetic)</th><th>What the records show</th><th>Outcome</th></tr></thead><tbody>
+<tr><td>Jordan Hale</td><td>3 attempts, all passed, no score; attempt 3 has 20 of 20 correct answers</td><td>Recovered by recorded override; CPD Certificate available</td></tr>
+<tr><td>Tom Becker</td><td>1 attempt passed, no score; 19 of 20 correct, lesson 2 at 4 of 5 (meets the rule)</td><td>Recovered by recorded override</td></tr>
+<tr><td>Priya Nair</td><td>Completed by hand on 25 September by the course administrator; same fault in the attempt</td><td>A workaround for the same fault; kept as it is</td></tr>
+<tr><td>Sam Okafor</td><td>Stopped in lesson 2, status incomplete</td><td>Not affected; resumes in the new package</td></tr>
+</tbody></table></div>
+<h3>Outcome statement for the support team</h3>
+<div class="statement"><p>Your course record is now complete. Moodle had saved all three of your attempts and every answer: each attempt passed, and in the last one all 20 answers were correct. The course package did not send a score, so Moodle could not mark the course complete. We confirmed your pass from the saved answers and corrected your completion; your attempts are unchanged. Your CPD Certificate is ready under Step 2 of the course. You do not need to do anything else.</p></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>The permanent fix</h2>
+<p class="sub">Model chosen: one overall numeric score from a final assessment. The lessons keep their knowledge checks, which still go to Moodle as interactions; the final assessment covers all four lessons and is the only tracked score, so it is not presented as an average of module scores.</p>
+<div class="cols">
+<div><h3>Settings, before and after</h3><table><thead><tr><th>Setting</th><th>As found</th><th>After</th></tr></thead><tbody><tr class="changed"><th scope="row">Display package</th><td>New window</td><td>Current window</td></tr>
+<tr class="changed"><th scope="row">Display attempt status</th><td>No</td><td>Dashboard and entry page</td></tr>
+<tr class="changed"><th scope="row">Maximum grade</th><td>80</td><td>100</td></tr>
+<tr class="changed"><th scope="row">Grade to pass</th><td>not set</td><td>80</td></tr>
+<tr class="changed"><th scope="row">Mastery score in the manifest</th><td>none</td><td>80</td></tr>
+<tr class="changed"><th scope="row">Mastery score overrides status</th><td>Yes</td><td>No</td></tr>
+<tr class="changed"><th scope="row">Force new attempt</th><td>No</td><td>When previous attempt completed, passed or failed</td></tr>
+<tr><th scope="row">Attempts grading</th><td>Highest attempt</td><td>Highest attempt</td></tr>
+<tr class="changed"><th scope="row">Auto-commit</th><td>No</td><td>Yes</td></tr>
+<tr class="changed"><th scope="row">Auto-continue</th><td>Yes</td><td>No</td></tr>
+<tr class="changed"><th scope="row">Required status</th><td>Completed or Passed</td><td>Passed</td></tr>
+<tr><th scope="row">Minimum score</th><td>80</td><td>80</td></tr>
+<tr class="changed"><th scope="row">Receive a passing grade</th><td>No</td><td>Yes</td></tr></tbody></table>
+<p class="note">Package 1.0.0 <code>bf3093172e96…</code> replaced by 2.0.0 <code>ec98aac07195…</code>; the SCO identifier stays the same, so every saved value remains linked.</p></div>
+<div><h3>Why these values</h3>
+<p><b>Status passed and score 80 and passing grade</b> together mean a result below 80 can never complete, whatever the package reports.</p>
+<p><b>Mastery override off.</b> The package reports a fail as <i>incomplete</i>, so the learner returns to the same attempt for a retake. With override on, Moodle would turn that into <i>failed</i>, and the next launch would start a fresh attempt.</p>
+<p><b>New attempt after a finished one, highest attempt counts.</b> Reopening a passed course can no longer overwrite the pass. The SCORM lab below shows what happens without it.</p>
+<p><b>Current window.</b> No pop-up blocking, and Save and exit returns to the course page on desktop and phone.</p>
+<p><b>Auto-commit on.</b> Measured: Moodle sent an unsaved change by itself after 61 seconds.</p></div>
+</div>
+<h3>Release and rollback</h3>
+<ol class="steps prose">
+<li>Staging copy by backup and restore, with learners and their records.</li>
+<li>Fix applied to staging; a rollback point saves the package, settings, completion rows and certificate route.</li>
+<li>Rollback tested: package checksum, settings and all completion rows back as before. Fix applied again; all tests run on staging.</li>
+<li>Production: evidence export, fix, evidence export, a test learner passes on the live course. Course completion appeared after 3 seconds.</li>
+</ol>
+<div class="cols"><figure class=""><img src="img/release_course_learner1.png" alt="Course page of a recovered learner after the release" loading="lazy" width="1280" height="900"><figcaption>After the release: the recovered learner sees Done and the CPD Certificate; the old certificate is hidden.</figcaption></figure>
+<figure class=""><img src="img/t2_resumed.png" alt="Resuming in lesson 2 after signing out" loading="lazy" width="1280" height="900"><figcaption>Test 2: after signing out and back in, the same attempt resumes in lesson 2 at the second block.</figcaption></figure></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Acceptance tests</h2>
+<p class="sub">Dedicated test learners, a real browser, never the administrator preview. Each test lists account, course, package, browser, steps, expected and actual outcome, and its evidence. Open a test for the detail.</p>
+<details class="test"><summary><span class="num">1</span><span class="tname">Reproduce the original fault</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester1</dd><dt>Course and package</dt><dd>KPA-LADDER, package 1.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop, new window</dd><dt>Steps</dt><dd>Complete all four lessons with every answer right, exit with Save and exit, reopen the entry page.</dd>
+<dt>Expected</dt><dd>Package reports passed without a score; Moodle shows grade 0 and the activity not complete.</dd><dt>Actual</dt><dd>status passed, score none, grade 0.00000, completion none; entry page: Completion requirements: |  Done: Complete or pass the activity |  Done: Receive a grade | To do: | Receive a score of 80 or more | Opens the course. | Enter | </dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t1_player_done.png</li><li>t1_entry.png</li></ul></dd></dl></details><details class="test"><summary><span class="num">2</span><span class="tname">Partial course and return</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester2</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop, current window</dd><dt>Steps</dt><dd>Finish lesson 1, read one more block of lesson 2, Save and exit, sign out, sign in, Enter.</dd>
+<dt>Expected</dt><dd>Same attempt, resumes in lesson 2 at the second block, lesson 1 still finished.</dd><dt>Actual</dt><dd>attempts 1, resume banner shown, &quot;Checking the ladder before use&quot; with 2 blocks shown, saved bookmark {&quot;v&quot;:&quot;2.0.0&quot;,&quot;at&quot;:&quot;l2&quot;,&quot;b&quot;:1,&quot;done&quot;:[&quot;l1&quot;],&quot;q&quot;:{&quot;l1&quot;:[1,0,1,1,1]},&quot;f&quot;:null}</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t2_resumed.png</li></ul><p class="note">Lesson and block (text position inside a block is not saved).</p></dd></dl></details><details class="test"><summary><span class="num">3</span><span class="tname">Browser and device change</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester2</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium (fresh profile), iPhone 13 and Pixel 7 emulation</dd><dt>Steps</dt><dd>Open the same account in a new browser profile and two phone profiles after test 2.</dd>
+<dt>Expected</dt><dd>Each resumes lesson 2 from Moodle data; nothing depends on local browser storage.</dd><dt>Actual</dt><dd>second Chromium profile (no shared storage): &quot;Checking the ladder before use&quot;, package keys in localStorage 0; iPhone 13 emulation: &quot;Checking the ladder before use&quot;, package keys in localStorage 0; Pixel 7 emulation: &quot;Checking the ladder before use&quot;, package keys in localStorage 0</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t3_profile2.png</li><li>t3_iPhone_13.png</li><li>t3_Pixel_7.png</li></ul><p class="note">Firefox and Safari were not available on the test server; phones are emulated in Chromium, not real devices.</p></dd></dl></details><details class="test"><summary><span class="num">4</span><span class="tname">Pass and score</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester3</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Complete the lessons, score 9 of 10 in the final assessment, Save and exit; check entry page, gradebook and the teacher attempt report.</dd>
+<dt>Expected</dt><dd>Score 90 sent with status passed; entry page, gradebook and attempt report all show 90.</dd><dt>Actual</dt><dd>package 90 %; Moodle status passed, score 90, grade 90.00000, completion 2; entry: Grade reported: 90% | Previous ; gradebook grade: 90.00; report: Case Tester 3 case.tester3@kpacademy.invalid 1 Monday, 26 October 2026, 2:12 PM Monday, 26 October 2026, 2:13 PM 90 CT Case Tester 4 </dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t4_final.png</li><li>t4_entry.png</li><li>t4_grades.png</li><li>t4_attempt_report.png</li></ul></dd></dl></details><details class="test"><summary><span class="num">5</span><span class="tname">Pass boundaries (80 % course)</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester4</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Final assessment with 7 of 10 right (70 %), exit, re-enter the same attempt, retake with 8 of 10 (80 %).</dd>
+<dt>Expected</dt><dd>70 % stays incomplete with no completion; 80 % passes and completes.</dd><dt>Actual</dt><dd>70 %: package 70 %, status incomplete, grade 70.00000, completion none; re-entry: Previous result: 70 % (best 70 %).; 80 %: package 80 %, status passed, grade 80.00000, completion 2, attempts 1</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t5_80.png</li></ul><p class="note">The 100 % rule (one wrong answer fails, all correct passes) is tested in the SCORM lab course, Site Induction check.</p></dd></dl></details><details class="test"><summary><span class="num">6</span><span class="tname">Retake and review</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester3 (passed in test 4), case.tester4 (failed then passed in test 5)</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Reopen the passed course, look around, Save and exit. Failed-quiz retake is covered by test 5.</dd>
+<dt>Expected</dt><dd>A new attempt opens for review; grade 90, completion and CPD Certificate access stay.</dd><dt>Actual</dt><dd>opened &quot;When is a ladder the right choice?&quot;, attempts 1 -&gt; 2, grade 90.00000 -&gt; 90.00000, completion 2 -&gt; 2, CPD link shown</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t6_course.png</li></ul></dd></dl></details><details class="test"><summary><span class="num">7</span><span class="tname">Certificate</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester3 (qualifies), case.tester5 (has not passed)</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Qualifying learner opens the CPD Certificate and views it; the e-mail task runs; a learner without a pass opens the course page.</dd>
+<dt>Expected</dt><dd>Certificate issued once to the qualifying learner; the other learner sees one clear condition and no certificate.</dd><dt>Actual</dt><dd>issues [{&quot;name&quot;:&quot;CPD Certificate&quot;,&quot;code&quot;:&quot;fzDePAZ1Dd&quot;,&quot;emailed&quot;:&quot;0&quot;,&quot;timecreated&quot;:&quot;1793024059&quot;}]; PDF downloaded; e-mail flag 0, email_failed events in the last hour 0; other learner sees: CPD Certificate Custom certificate Show more Not available unless: The activity Ladder Safety Awareness Course Step 1: Click here to start is ... ...</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t7_cpd_view.png</li><li>t7_not_qualified.png</li></ul><p class="note">Issuance and e-mail are separate checks: the demo server has no outgoing mail route, so an e-mail can be generated but not delivered.</p></dd></dl></details><details class="test"><summary><span class="num">8</span><span class="tname">Interrupted session</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester6</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Leave the player without exiting; close the browser; go offline for 5 s; lose the Moodle session; leave a value uncommitted.</dd>
+<dt>Expected</dt><dd>Committed state is kept in every case, failures are shown with a recovery hint, measured loss is at most the current block.</dd><dt>Actual</dt><dd>player closed: resumed &quot;Checking the ladder before use&quot; with 2 blocks; browser closed: resumed with 3 blocks of lesson 2; network loss: failure message shown; server bookmark while offline unchanged true; saved 2 s after reconnecting (offline 7 s), server now {&quot;v&quot;:&quot;2.0.0&quot;,&quot;at&quot;:&quot;l3&quot;,&quot;b&quot;:1,&quot;done&quot;:[&quot;l1; session expired: failure message shown; after signing in again resumed at &quot;Setting up a leaning ladder&quot; with 2 blocks (saved bookmark {&quot;v&quot;:&quot;2.0.0&quot;,&quot;at&quot;:&quot;l3&quot;,&quot;b&quot;:1,&quot;done&quot;:[&quot;l1&quot;,&quot;l2&quot;],&quot;q&quot;:{&quot;l1&quot;:[1,0,1,1,1],&quot;l2&quot;:[1,1,0,1,1]},&quot;f); lost: the block read after the session ended; Moodle auto-commit: an uncommitted value reached the server after 61 s</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t8_offline.png</li><li>t8_expired.png</li></ul></dd></dl></details><details class="test"><summary><span class="num">9</span><span class="tname">Long course saving</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester7</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, package 2.0.0-long</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Work through two lessons of the long package, exit, reopen.</dd>
+<dt>Expected</dt><dd>The large suspend data is stored and reloaded in full, without API errors or a reset.</dd><dt>Actual</dt><dd>stored suspend data 30111 characters, API errors [], reopened at &quot;Checking the ladder before use&quot;</dd>
+<dt>Evidence</dt><dd><ul class="files"></ul><p class="note">Site setting scormstandard is off, so Moodle accepts more than the SCORM 1.2 limit of 4096 characters. With it on, the same package would be rejected with error 405.</p></dd></dl></details><details class="test"><summary><span class="num">10</span><span class="tname">Mobile and navigation</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.tester8, case.tester9</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING (current window), KPA-LADDER (new window), package 2.0.0 and 1.0.0</dd>
+<dt>Browser or device</dt><dd>iPhone 13 and Pixel 7 emulation in Chromium; Chromium desktop for keyboard</dd><dt>Steps</dt><dd>Launch, check layout and controls, Save and exit on two phones; keyboard-only start; compare with the new-window launch.</dd>
+<dt>Expected</dt><dd>No horizontal scrolling, controls visible, exit returns to the course page, keyboard works.</dd><dt>Actual</dt><dd>iPhone 13: horizontal overflow 0px, Save and exit visible true, back on /course/view.php; Pixel 7: horizontal overflow 0px, Save and exit visible true, back on /course/view.php; keyboard: reached &quot;Continue&quot; with Tab, Enter showed 1 more block; original new-window launch on iPhone 13 emulation: opened in a new window</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t10_iPhone_13.png</li><li>t10_Pixel_7.png</li></ul><p class="note">The package has no audio, so audio pause and playback were not applicable.</p></dd></dl></details><details class="test"><summary><span class="num">11</span><span class="tname">Historical records</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.learner1 to case.learner4</dd><dt>Course and package</dt><dd>KPA-LADDER, package 1.0.0 attempts, 2.0.0 after release</dd>
+<dt>Browser or device</dt><dd>n/a (records)</dd><dt>Steps</dt><dd>Export evidence as found, before and after release; recover learner1 and learner3 with notes and audit files; review all learners; release the fix and re-check.</dd>
+<dt>Expected</dt><dd>Original attempts, values and timestamps intact; corrections recorded; manual overrides accounted for.</dd><dt>Actual</dt><dd>Evidence exports as-found, before-release and after-release (666 SCORM values, 105 interactions). learner1 and learner3 completed by recorded override with course note and audit file; learner2 override of 25 September kept through the release; learner4 (unfinished) unchanged and resumes in 2.0.0. Moodle recalculation removed all 3 overrides; the repair script restored them.</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>evidence/20261026-134840-as-found</li><li>evidence/audit</li></ul></dd></dl></details><details class="test"><summary><span class="num">12</span><span class="tname">Package update</span>
+<span class="verdict ok">Passed</span></summary>
+<dl><dt>Account</dt><dd>case.learner4 and all history</dd><dt>Course and package</dt><dd>KPA-LADDER-STAGING, then KPA-LADDER, package 1.0.0 to 2.0.0</dd>
+<dt>Browser or device</dt><dd>Chromium desktop</dd><dt>Steps</dt><dd>Replace the package on the staging copy, check SCO identifiers and attempt links, resume an attempt saved by 1.0.0, roll back, check checksum and settings, apply again; release.</dd>
+<dt>Expected</dt><dd>Identifiers and attempts stay linked, bookmarks resume, certificates kept; rollback returns the original package and settings.</dd><dt>Actual</dt><dd>SCO identifier ladder_sco kept and all saved values linked to it; learner4 resumed in 2.0.0 at lesson 2 block 2 with lesson 1 ticked; issued certificates kept; rollback restored package sha256 bf3093...2e27, the original settings and all 3 completion rows.</dd>
+<dt>Evidence</dt><dd><ul class="files"><li>t12_resume_after_update.png</li></ul></dd></dl></details>
+<div class="cols"><figure class=""><img src="img/t8_offline.png" alt="Message when progress cannot be saved" loading="lazy" width="1280" height="900"><figcaption>Test 8: offline, the course says that the latest progress was not saved and when it last was.</figcaption></figure>
+<figure class="phone"><img src="img/t10_iPhone_13.png" alt="The course on a phone" loading="lazy" width="1280" height="900"><figcaption>Test 10: current-window launch on a phone-sized screen, no sideways scrolling.</figcaption></figure></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>What Moodle does that you might not expect</h2>
+<p class="sub">Found during the work, each reproduced on this site.</p>
+<div class="finding"><h3>A failed save can be reported as a success</h3><p>When the request fails, <code>mod/scorm/request.js</code> retries with the Beacon API and returns <code>"true"</code> without hearing from the server. Offline, the package is told its progress is saved when it is not. Package 2.0.0 checks the connection before it commits and saves again when it comes back; measured loss after a 7-second outage: nothing.</p></div>
+<div class="finding"><h3>Unlocking completion deletes manual overrides</h3><p>Saving unlocked completion settings deletes all completion rows and recalculates them. In staging all three overrides disappeared. The repair script puts them back exactly as they were.</p></div>
+<div class="finding"><h3>Backup and restore forgets who overrode</h3><p>A restored staging copy keeps the completions but loses <code>overrideby</code>, so overrides look automatic. The staging script copies the marker over, or a staging test would prove nothing.</p></div>
+<div class="finding"><h3>"Complete and passed" excludes overrides</h3><p>My first release required the SCORM activity to be complete <i>and passed</i> for the certificate. A manual override is only complete, so the recovered learners lost access. The check after the release caught it; the condition is now "complete", which, with the new rule, already requires a pass of 80.</p></div>
+<div class="finding"><h3>Large bookmarks are accepted</h3><p>With the SCORM 1.2 standard mode off, Moodle stored and returned about 30 000 characters of suspend data without an error. With it on, values above 4096 characters are rejected.</p></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Course audit</h2>
+<p class="sub">Every course on the site, live, hidden or test copy, and every assessed activity, with the approved rule and its source, the content rule kept apart from the pass mark, the actual settings and the action. Courses tested with learner accounts are marked; the rest are a settings audit.</p>
+<div class="scroll"><table class="register"><thead><tr><th>Course</th><th>Activity</th><th>Approved rule and source</th><th>Content rule</th><th>Actual settings</th><th>Defect and learners to review</th><th>Action and test</th></tr></thead>
+<tbody><tr><td>Ladder Safety Awareness Course (STAGING)<br><span class="note">id 25, hidden test copy</span></td>
+<td>Ladder Safety Awareness Course Step 1: Click here to start</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass 80, package 2.0.0, score.raw 0 to 100</td>
+<td>none found<br><span class="note">case.tester1</span></td>
+<td>Review listed learners<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Ladder Safety Awareness Course (STAGING)<br><span class="note">id 25, hidden test copy</span></td>
+<td>Long package test (2.0.0-long)</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass none, package 2.0.0-long, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Module 1: AI Literacy Essentials (trial)<br><span class="note">id 8, live</span></td>
+<td>Check: Chapter 1 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Module 1: AI Literacy Essentials (trial)<br><span class="note">id 8, live</span></td>
+<td>Check: Chapter 2 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Module 1: AI Literacy Essentials (trial)<br><span class="note">id 8, live</span></td>
+<td>Check: Chapter 3 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Module 2: AI in Teaching and Learning (trial)<br><span class="note">id 9, live</span></td>
+<td>Check: Chapter 1 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Module 2: AI in Teaching and Learning (trial)<br><span class="note">id 9, live</span></td>
+<td>Check: Chapter 2 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Module 2: AI in Teaching and Learning (trial)<br><span class="note">id 9, live</span></td>
+<td>Check: Chapter 3 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Module 3: AI, Work and Society (trial)<br><span class="note">id 10, live</span></td>
+<td>Check: Chapter 1 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Module 3: AI, Work and Society (trial)<br><span class="note">id 10, live</span></td>
+<td>Check: Chapter 2 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Module 3: AI, Work and Society (trial)<br><span class="note">id 10, live</span></td>
+<td>Check: Chapter 3 quiz</td><td>Each chapter quiz 60 %; a chapter opens after the previous quiz is passed<br><span class="note">Course specification: build_course.php and the quiz introduction</span></td>
+<td>Every Read and Try page viewed (activity completion)</td>
+<td>scale 0 to 100, pass 60</td>
+<td>none found</td>
+<td>No change<br><span class="note">untested (settings audit only)</span></td></tr><tr><td>Ladder Safety Awareness Course<br><span class="note">id 19, live</span></td>
+<td>Ladder Safety Awareness Course Step 1: Click here to start</td><td>Final assessment 80 % (overall course score); every lesson check 4 of 5 to continue<br><span class="note">Package course.json (final assessment) and the chosen assessment model</span></td>
+<td>All four lessons finished inside the package (gating); no audio or video</td>
+<td>scale 0 to 100, pass 80, package 2.0.0, score.raw 0 to 100</td>
+<td>none found<br><span class="note">case.tester1</span></td>
+<td>Review listed learners<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>Before: completion-tracked package, Moodle default rule</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass none, package lab, not sent</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>After: quiz-result package, passed + 80 % + passing grade</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass 80, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>Before: manifest mastery score 60 for an 80 % check, override on</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass none, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>After: same package, pass mark also required by Moodle</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass 80, package lab, score.raw 0 to 100</td>
+<td>none found<br><span class="note">lab.tester4</span></td>
+<td>Review listed learners<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>Before: retake in the same attempt</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass 80, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>SCORM lab: test bench<br><span class="note">id 15, hidden test copy</span></td>
+<td>After: new attempt after a finished one, highest attempt counts</td><td>Test configuration, not learner-facing<br><span class="note">Test bench</span></td>
+<td>n/a</td>
+<td>scale 0 to 100, pass 80, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Construction Safety Essentials (SCORM lab)<br><span class="note">id 14, live</span></td>
+<td>Working at Height: knowledge check</td><td>Working at Height 80 %; Site Induction 100 %; Module 2 opens after Module 1 is passed<br><span class="note">Package specification packages.json and the course summary</span></td>
+<td>None beyond the knowledge checks</td>
+<td>scale 0 to 100, pass 80, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr><tr><td>Construction Safety Essentials (SCORM lab)<br><span class="note">id 14, live</span></td>
+<td>Site Induction: sign-off check</td><td>Working at Height 80 %; Site Induction 100 %; Module 2 opens after Module 1 is passed<br><span class="note">Package specification packages.json and the course summary</span></td>
+<td>None beyond the knowledge checks</td>
+<td>scale 0 to 100, pass 100, package lab, score.raw 0 to 100</td>
+<td>none found</td>
+<td>No change<br><span class="note">tested with learner accounts</span></td></tr></tbody></table></div>
+<h3>Standard upload settings per model</h3>
+<div class="scroll"><table><thead><tr><th>Model</th><th>Package</th><th>Moodle</th></tr></thead><tbody>
+<tr><td>Overall score, 80 %</td><td>Track the final assessment; pass mark 80; report passed, fail as incomplete; manifest mastery 80</td><td>Scale 0 to 100, grade to pass 80, status passed + minimum score 80 + passing grade, mastery override off, new attempt after a finished one, highest attempt, attempt status shown</td></tr>
+<tr><td>Overall score, 100 %</td><td>As above with pass mark 100</td><td>As above with 100; one wrong answer fails (tested in the SCORM lab)</td></tr>
+<tr><td>Completion only</td><td>Track course completion; report passed or completed</td><td>Status passed or completed only, no score or grade condition, scale not used for passing. Needs the course owner's agreement, because no score is reported.</td></tr>
+</tbody></table></div>
+</div></section>
+
+<section><div class="wrap">
+<h2>SCORM lab: each setting in isolation</h2>
+<p class="sub">A test bench with one activity per setting, played by test learners. The visible lab course on the site uses the corrected settings with an 80 % and a 100 % check.</p>
+<div class="scroll"><table><thead><tr><th>Activity</th><th>Learner action</th><th>Grade reported</th><th>Completion shown to the learner</th></tr></thead><tbody><tr><td>Before: package tracks completion, Moodle default rule</td><td>scores 40 %</td><td>40%</td><td>Done: Complete the activity</td></tr><tr><td>After: quiz result, passed + 80 % + passing grade</td><td>scores 40 %</td><td>40%</td><td>To do: Pass the activity Done: Receive a grade Failed: Receive a passing grade To do: Receive a score of 80 or more</td></tr><tr><td>After: quiz result, passed + 80 % + passing grade</td><td>retakes, scores 80 % (pass mark)</td><td>80%</td><td>Done: Pass the activity Done: Receive a grade Done: Receive a passing grade Done: Receive a score of 80 or more</td></tr><tr><td>Before: manifest mastery 60 for an 80 % check</td><td>scores 60 %</td><td>60%</td><td>To do: Pass the activity</td></tr><tr><td>After: Moodle also requires 80</td><td>scores 60 %</td><td>60%</td><td>To do: Pass the activity Done: Receive a grade Failed: Receive a passing grade To do: Receive a score of 80 or more</td></tr><tr><td>Before: retake inside the same attempt</td><td>scores 100 %</td><td>100%</td><td>Done: Pass the activity Done: Receive a grade Done: Receive a passing grade Done: Receive a score of 80 or more</td></tr><tr><td>Before: retake inside the same attempt</td><td>re-enters later, retakes, scores 40 %</td><td>40%</td><td>Done: Pass the activity Done: Receive a grade Failed: Receive a passing grade To do: Receive a score of 80 or more</td></tr><tr><td>After: new attempt after a finished one, highest attempt counts</td><td>scores 100 %</td><td>100%</td><td>Done: Pass the activity Done: Receive a grade Done: Receive a passing grade Done: Receive a score of 80 or more</td></tr><tr><td>After: new attempt after a finished one, highest attempt counts</td><td>re-enters later, retakes, scores 40 %</td><td>100%</td><td>Done: Pass the activity Done: Receive a grade Done: Receive a passing grade Done: Receive a score of 80 or more</td></tr></tbody></table></div>
+</div></section>
+
+<section><div class="wrap prose">
+<h2>Limits</h2>
+<ul>
+<li>The package is my own SCORM 1.2 player that reports the way the Rise 360 options do; no Articulate export was used, so the export settings themselves were not inspected.</li>
+<li>Firefox and Safari could not run on the test server; the second browser is a fresh Chromium profile and the phones are Chromium emulations, not real devices.</li>
+<li>The course has no audio, so audio pause and resume were not tested. The supported bookmark level is lesson and block.</li>
+<li>No comparison in SCORM Cloud, which needs an account.</li>
+<li>Recovered learners still see grade 0 % for their old attempts on the entry page, because no score was ever sent and none was invented. Their course page shows Done and the certificate.</li>
+</ul>
+</div></section>
+
+<footer><div class="wrap">Personal project by Amrina, built with AI as a supporting tool for coding. All learners and records are synthetic. <a href="../">Kita Paham AI Academy</a> · <a href="https://sayamrina.github.io/">Portfolio</a></div></footer>
+</body>
+</html>
