@@ -238,21 +238,21 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>9 chapters</mark><br>each with sources, a quiz and a hands-on task</p>
     </article>
 
-    <article class="proj" id="p-lager" data-cat="design web">
-      <img src="img/lager_rundgang.jpg" alt="Screenshot of the Lager-Rundgang learning game with a warehouse floor plan, a safety scenario and the guide avatar" loading="lazy">
+    <article class="proj" id="p-drift" data-cat="ai apps">
+      <img src="img/catch_the_drift.jpg" alt="Chart: one student's 19-minute video lecture, with gaze on slides or instructor, the detector's mind-wandering score, the student's own reports and the tutor's prompts" loading="lazy">
       <div>
-        <h3>Lager-Rundgang: learning game for warehouse safety</h3>
-        <p class="kind">Learning game, own project, 2026</p>
-        <p>A browser learning game for occupational safety training. Learners follow the yellow floor marking through a warehouse and decide what to do in six real situations. A guide avatar explains every answer, also the wrong ones, and reads it aloud.</p>
+        <h3>Catch the Drift</h3>
+        <p class="kind">Research pilot, learning analytics and eye tracking</p>
+        <p>Students drift away during video lectures without anyone noticing. This preregistered pilot tests on open eye-tracking data from 143 students whether gaze can tell a tutor when a student's mind wanders, early enough to step in with a catch-up question, and reports every result, including the ones that failed.</p>
         <ul>
-          <li>Scenario questions that ask for an action, with feedback on every option and the rule behind it</li>
-          <li>Floor plan navigation that shows progress, and a review of the stations that were missed</li>
-          <li>Keyboard operable, voice output that can be switched off, works on phones and in dark mode</li>
+          <li>Person-independent detectors from 12 gaze features stay at chance (AUC 0.49); a GRU on fixation sequences reaches 0.57</li>
+          <li>Detector-timed prompts beat a fixed schedule but not random timing, which is why a random baseline belongs in every such test</li>
+          <li>Demo replays real students and shows the grounded catch-up question the tutor would ask</li>
         </ul>
-        <p class="stack">Learning game design, UX, HTML, CSS, JavaScript, SVG, Web Speech API</p>
-        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/lager-rundgang/">Play the game</a><a class="btn" href="https://github.com/sayamrina/lager-rundgang">Source code</a></div>
+        <p class="stack">Python, eye tracking, scikit-learn, PyTorch, permutation tests, LLM question generation, Streamlit</p>
+        <div class="actions"><a class="btn solid" href="https://catch-the-drift.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/catch-the-drift/">Project page</a><a class="btn" href="https://github.com/sayamrina/catch-the-drift">Code and report</a></div>
       </div>
-      <p class="proof"><mark>6 stations</mark><br>each answer explained by the avatar</p>
+      <p class="proof"><mark>9 hypotheses</mark><br>written down before any model was fitted</p>
     </article>
 
     <article class="proj" id="p-metalens" data-cat="ai">
@@ -391,23 +391,6 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>13% vs 0%</mark><br>unrelated lines changed: prompt profile vs RSA selection</p>
     </article>
 
-    <article class="proj" id="p-drift" data-cat="ai apps">
-      <img src="img/catch_the_drift.jpg" alt="Chart: one student's 19-minute video lecture, with gaze on slides or instructor, the detector's mind-wandering score, the student's own reports and the tutor's prompts" loading="lazy">
-      <div>
-        <h3>Catch the Drift</h3>
-        <p class="kind">Research pilot, learning analytics and eye tracking</p>
-        <p>Students drift away during video lectures without anyone noticing. This preregistered pilot tests on open eye-tracking data from 143 students whether gaze can tell a tutor when a student's mind wanders, early enough to step in with a catch-up question, and reports every result, including the ones that failed.</p>
-        <ul>
-          <li>Person-independent detectors from 12 gaze features stay at chance (AUC 0.49); a GRU on fixation sequences reaches 0.57</li>
-          <li>Detector-timed prompts beat a fixed schedule but not random timing, which is why a random baseline belongs in every such test</li>
-          <li>Demo replays real students and shows the grounded catch-up question the tutor would ask</li>
-        </ul>
-        <p class="stack">Python, eye tracking, scikit-learn, PyTorch, permutation tests, LLM question generation, Streamlit</p>
-        <div class="actions"><a class="btn solid" href="https://catch-the-drift.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/catch-the-drift/">Project page</a><a class="btn" href="https://github.com/sayamrina/catch-the-drift">Code and report</a></div>
-      </div>
-      <p class="proof"><mark>9 hypotheses</mark><br>written down before any model was fitted</p>
-    </article>
-
     <article class="proj" id="p-typo3" data-cat="web">
       <img src="img/fluvenco.jpg" alt="Home page of the multilingual Fluvenco website built with TYPO3" loading="lazy">
       <div>
@@ -457,6 +440,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
         <div class="actions"><a class="btn solid" href="https://app.lumi.education/run/S-stqM">Try the learning unit</a></div>
       </div>
       <p class="proof"><mark>5 tasks</mark><br>one for each SMART criterion, then learners write their own goal</p>
+    </article>
+
+    <article class="proj" id="p-lager" data-cat="design web">
+      <img src="img/lager_rundgang.jpg" alt="Screenshot of the Lager-Rundgang learning game with a warehouse floor plan, a safety scenario and the guide avatar" loading="lazy">
+      <div>
+        <h3>Lager-Rundgang: learning game for warehouse safety</h3>
+        <p class="kind">Learning game, own project, 2026</p>
+        <p>A browser learning game for occupational safety training. Learners follow the yellow floor marking through a warehouse and decide what to do in six real situations. A guide avatar explains every answer, also the wrong ones, and reads it aloud.</p>
+        <ul>
+          <li>Scenario questions that ask for an action, with feedback on every option and the rule behind it</li>
+          <li>Floor plan navigation that shows progress, and a review of the stations that were missed</li>
+          <li>Keyboard operable, voice output that can be switched off, works on phones and in dark mode</li>
+        </ul>
+        <p class="stack">Learning game design, UX, HTML, CSS, JavaScript, SVG, Web Speech API</p>
+        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/lager-rundgang/">Play the game</a><a class="btn" href="https://github.com/sayamrina/lager-rundgang">Source code</a></div>
+      </div>
+      <p class="proof"><mark>6 stations</mark><br>each answer explained by the avatar</p>
     </article>
     </div>
     <div class="more"><button type="button" class="btn" id="proj-more" aria-controls="projects" aria-expanded="false" hidden></button></div>
