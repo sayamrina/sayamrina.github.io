@@ -289,6 +289,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>13% vs 0%</mark><br>unrelated lines changed: prompt profile vs RSA selection</p>
     </article>
 
+    <article class="proj" id="p-wunschplan" data-cat="ai apps">
+      <img src="img/wunschplan.jpg" alt="Wunschplan installation plan: rooms with sockets, switches and lights; after a change request the new network socket is green and the removed TV socket dashed red" loading="lazy">
+      <div>
+        <h3>Wunschplan</h3>
+        <p class="kind">AI app, structured LLM output for the electrical trade</p>
+        <p>After a customer visit, an electrician still has to turn the notes into line items, a plan and a quote, and redo it all when the customer changes their mind. Wunschplan does this from typed or dictated German notes and records every change request as a new version with a marked plan and the price difference.</p>
+        <ul>
+          <li>The language model may only pick rooms and components from a catalogue (Pydantic schema); prices, VAT and checks such as mandatory smoke alarms are calculated in code</li>
+          <li>Honest evaluation on 37 hand-annotated cases: the offline rules are perfect on tidy notes but reach only F1 0.50 on messy ones, which is what the model is for</li>
+          <li>Drawing-style floor plan, per-room editing, one-click fixes, dictation and a PDF quote</li>
+        </ul>
+        <p class="stack">Python, OpenAI API (structured output, transcription), Pydantic, Streamlit, fpdf2, pytest</p>
+        <div class="actions"><a class="btn solid" href="https://wunschplan.streamlit.app/">Live app</a><a class="btn" href="https://sayamrina.github.io/wunschplan/">Project page</a><a class="btn" href="https://github.com/sayamrina/wunschplan">Code</a></div>
+      </div>
+      <p class="proof"><mark>F1 0.50</mark><br>for rule-based recognition on messy notes, which is why the model is there</p>
+    </article>
+
     <article class="proj" id="p-metalens" data-cat="ai">
       <img src="img/metadata_lens.jpg" alt="Metadata Lens overview: completeness of Dublin Core fields per repository" loading="lazy">
       <div>
