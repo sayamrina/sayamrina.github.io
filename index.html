@@ -207,12 +207,12 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <div>
         <h3>ERM Tutor-AI 2</h3>
         <p class="kind">Version 2 of my master's thesis project, 2026</p>
-        <p>A virtual assistant for the Empirical Research Methods course, rebuilt from my thesis app. It keeps the same lecture materials, model and tutor rules, and makes every answer checkable: each statement cites the lecture page it is based on, and a practice mode gives feedback on the student's own answers.</p>
+        <p>A virtual assistant for the Empirical Research Methods course, rebuilt from my thesis app. It keeps the same lecture materials and model, with stricter rules: the slides come first, statements cite the lecture page they are based on, and general knowledge is marked. A practice mode gives feedback on the student's own answers.</p>
         <ul>
           <li>Numbered citations that open the cited lecture slide, with the lines that support the statement marked</li>
           <li>"Behind the answer" panel: retrieval candidates and scores, time per step, tokens and cost of each answer</li>
           <li>Practice mode with feedback and progress per lecture unit</li>
-          <li>Evaluation script on the 20 thesis questions: 20 of 20 answers from the course, off-topic questions declined, 96% of cited statements match their slide</li>
+          <li>Evaluation script on the 20 thesis questions: revised prompt raised cited statements from 24% to 41%; 99% of cited statements match their slide; off-topic questions declined</li>
         </ul>
         <p class="stack">Python, FastAPI, React, TypeScript, GPT-4o, RAG, NumPy, pypdfium2, pytest, Docker, Render</p>
         <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/erm-tutorai-2/open.html">Live app</a><a class="btn" href="https://sayamrina.github.io/erm-tutorai-2/">Project page</a><a class="btn" href="https://github.com/sayamrina/erm-tutorai-2">Code</a></div>
