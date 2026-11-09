@@ -273,6 +273,23 @@ footer { border-top: 1px solid var(--rule); padding: 20px 0 40px; font: 400 14px
       <p class="proof"><mark>9 hypotheses</mark><br>written down before any model was fitted</p>
     </article>
 
+    <article class="proj" id="p-ledger" data-cat="ai">
+      <img src="img/hypothesis_ledger.jpg" alt="Strip of 144 marks, one per study, comparing expert and model verdicts on two invasion biology hypotheses" loading="lazy">
+      <div>
+        <h3>Hypothesis Ledger</h3>
+        <p class="kind">Research pilot, evidence synthesis with LLMs and knowledge graphs</p>
+        <p>Experts have recorded for hundreds of ecology studies whether they support a hypothesis about biological invasions. This pilot lets a language model read the abstracts, extract each causal claim with the exact sentence behind it, store everything as a knowledge graph with provenance, and compares its conclusions with the experts'.</p>
+        <ul>
+          <li>Verdicts agree with expert labels in 75% of 131 studies (majority class: 43%); 99.3% of 450 evidence quotes verified word for word</li>
+          <li>RDF graph with PROV-O provenance, SHACL validation and SPARQL queries, linked to the Open Research Knowledge Graph</li>
+          <li>Study design changes the conclusion in opposite directions for the two hypotheses; an LLM judge proved too lenient (κ = 0.20)</li>
+        </ul>
+        <p class="stack">LLMs, structured outputs, RDF, PROV-O, SHACL, SPARQL, causal graphs, Python</p>
+        <div class="actions"><a class="btn solid" href="https://sayamrina.github.io/hypothesis-ledger/">Project page</a><a class="btn" href="https://github.com/sayamrina/hypothesis-ledger">Code and data</a></div>
+      </div>
+      <p class="proof"><mark>99.3%</mark><br>of evidence quotes verified word for word in the source abstract</p>
+    </article>
+
     <article class="proj" id="p-whose" data-cat="ai">
       <img src="img/whose_inference.jpg" alt="Chart: steering a language model toward the user's perspective" loading="lazy">
       <div>
